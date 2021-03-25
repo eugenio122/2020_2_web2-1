@@ -4,6 +4,8 @@
     ViewData["Title"] = "Lançamentos";
 }
 
+<h1>Lançamentos</h1>
+
 <div>
     <p class="text-right">
         <a class="btn btn-success" asp-action="Create">
@@ -27,6 +29,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.DespesaReceita)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Categoria.Descricao)
+                    </th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -45,6 +50,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.DespesaReceita)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Categoria.Descricao)
                         </td>
                         <td>
                             <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Detalhes"><span class="icon bi bi-info-circle"></span></a>

@@ -27,6 +27,7 @@ namespace FinanceManagement.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Nome")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
@@ -42,6 +43,7 @@ namespace FinanceManagement.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Descricao")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
@@ -60,10 +62,11 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<decimal>("Saldo")
-                        .HasColumnType("money");
+                    b.Property<double>("Saldo")
+                        .HasColumnType("float");
 
                     b.Property<int?>("TipoContaId")
                         .HasColumnType("int");
@@ -85,6 +88,7 @@ namespace FinanceManagement.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Descricao")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
@@ -132,9 +136,10 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("DespesaReceita")
@@ -146,8 +151,8 @@ namespace FinanceManagement.Migrations
                     b.Property<string>("UsuarioId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("money");
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -173,7 +178,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Quantidade")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -190,6 +195,7 @@ namespace FinanceManagement.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Descricao")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
@@ -205,6 +211,7 @@ namespace FinanceManagement.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Tipo")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
@@ -238,6 +245,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Nome")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("NormalizedEmail")
@@ -261,6 +269,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Senha")
+                        .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
                     b.Property<bool>("TwoFactorEnabled")

@@ -43,9 +43,22 @@ namespace FinanceManagement.Controllers
             return View(lancamento);
         }
 
+        private int categoriaId = 0;
         // GET: Lancamentoes/Create
         public IActionResult Create()
         {
+            //ViewBag.Categorias = _context.Categorias.Select(c => new SelectListItem() { Text = c.Descricao, Value = c.Id.ToString() }).ToList();
+
+           var categoriasList = _context.Categorias.Select(c => new SelectListItem() { Text = c.Descricao, Value = c.Id.ToString(), Selected = true }).ToList();
+
+            categoriasList.Insert(0, new SelectListItem()
+            {
+                Text = "Selecione",
+                Value = string.Empty
+            });
+
+            ViewBag.Categorias = categoriasList;
+            
             return View();
         }
 
@@ -54,10 +67,14 @@ namespace FinanceManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Descricao,Valor,Data,DespesaReceita")] Lancamento lancamento)
+        public async Task<IActionResult> Create([Bind("Id,Descricao,Valor,Data,DespesaReceita,Categoria")] Lancamento lancamento)
         {
+            
+
             if (ModelState.IsValid)
             {
+                
+
                 _context.Add(lancamento);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

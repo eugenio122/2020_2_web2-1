@@ -27,8 +27,8 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Nome = table.Column<string>(type: "nvarchar(250)", nullable: true),
-                    Senha = table.Column<string>(type: "nvarchar(16)", nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Senha = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
                     UsuarioDependenteId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -61,7 +61,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Nome = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,7 +74,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -87,7 +87,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -100,7 +100,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,7 +113,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Tipo = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Tipo = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -232,7 +232,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantidade = table.Column<int>(type: "integer", nullable: false),
+                    Quantidade = table.Column<int>(type: "int", nullable: false),
                     PeriodoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -252,8 +252,8 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", nullable: true),
-                    Saldo = table.Column<decimal>(type: "money", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Saldo = table.Column<double>(type: "float", nullable: false),
                     BancoId = table.Column<int>(type: "int", nullable: true),
                     TipoContaId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -306,9 +306,9 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", nullable: true),
-                    Valor = table.Column<decimal>(type: "money", nullable: false),
-                    Data = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Valor = table.Column<double>(type: "float", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DespesaReceita = table.Column<bool>(type: "bit", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CategoriaId = table.Column<int>(type: "int", nullable: true),

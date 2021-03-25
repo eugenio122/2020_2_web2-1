@@ -31,7 +31,7 @@ namespace FinanceManagement
         {
             services.AddDbContext<FinanceManagementContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("AlanPC")));
+                    Configuration.GetConnectionString("EugenioPC")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
