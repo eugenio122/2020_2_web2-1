@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 
 namespace FinanceManagement
 {
@@ -30,7 +31,7 @@ namespace FinanceManagement
         {
             services.AddDbContext<FinanceManagementContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("EugenioPC")));
+                    Configuration.GetConnectionString("AlanPC")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -52,6 +53,7 @@ namespace FinanceManagement
             });
 
             services.AddScoped<InsereDadosBD>();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

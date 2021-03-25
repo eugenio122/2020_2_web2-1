@@ -32,15 +32,13 @@
                     <input class="form-check-input" asp-for="DespesaReceita" /> @Html.DisplayNameFor(model => model.DespesaReceita)
                 </label>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Cadastrar" class="btn btn-success" style="margin-right:10px;" />
+                <a class="btn btn-light" asp-action="index">Voltar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

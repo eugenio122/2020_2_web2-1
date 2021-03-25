@@ -10,10 +10,15 @@ namespace FinanceManagement.Models
         public int Id { get; set; }
 
         [MaxLength(250)]
+        [Column(TypeName = "nvarchar(250)")]
+        [Display(Name = "Descrição")]
         public string Descricao { get; set; }
 
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18,2)")]
         public double Valor { get; set; }
 
+        [Column(TypeName = "date")]
         public DateTime Data { get; set; }
 
         public bool DespesaReceita { get; set; }
