@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceManagement.Migrations
 {
     [DbContext(typeof(FinanceManagementContext))]
-    [Migration("20210325192730_InitialCreate")]
+    [Migration("20210326214902_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Descricao")
+                    b.Property<string>("DescCategoria")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 

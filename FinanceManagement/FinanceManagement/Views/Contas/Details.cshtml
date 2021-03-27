@@ -1,30 +1,43 @@
-﻿@model FinanceManagement.Models.Conta
+﻿@model FinanceManagement.Models.ViewModels.ContaViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalhes</h1>
 
 <div>
     <h4>Conta</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descricao)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DescBanco)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descricao)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DescBanco)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DescConta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DescConta)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TipoConta)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TipoConta)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Saldo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Saldo)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-warning" style="margin-right:10px;" asp-action="Edit" asp-route-id="@Model.Id">Editar</a> 
+
+    <a class="btn btn-light" asp-action="Index">Voltar</a>
 </div>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
+using FinanceManagement.Models.ViewModels;
 
 namespace FinanceManagement.Controllers
 {
@@ -20,21 +21,20 @@ namespace FinanceManagement.Controllers
         }
 
         // GET: Contas
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Contas.ToListAsync());
+            return View(this.IndexContaViewModel());
         }
 
         // GET: Contas/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var conta = await _context.Contas
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var conta = this.IndexContaViewModel().FirstOrDefault(x => x.Id == id);
             if (conta == null)
             {
                 return NotFound();
@@ -148,6 +148,38 @@ namespace FinanceManagement.Controllers
         private bool ContaExists(int id)
         {
             return _context.Contas.Any(e => e.Id == id);
+        }
+
+        private List<ContaViewModel> IndexContaViewModel()
+        {
+            List<ContaViewModel> lancamentoViewModel = new List<ContaViewModel>();
+
+            var lista = (from con in _context.Contas
+                         join ban in _context.Bancos on con.Banco.Id equals ban.Id
+                         join tpc in _context.TipoContas on con.TipoConta.Id equals tpc.Id
+                         select new
+                         {
+                             con.Id,
+                             con.Descricao,
+                             con.Saldo,
+                             ban.Nome,
+                             tpc.Tipo
+                         }
+                        ).ToList();
+
+
+            foreach (var item in lista)
+            {
+                ContaViewModel cvm = new ContaViewModel();
+                cvm.Id = item.Id;
+                cvm.DescConta = item.Descricao;
+                cvm.Saldo = item.Saldo;
+                cvm.DescBanco = item.Nome;
+                cvm.TipoConta = item.Tipo;
+                lancamentoViewModel.Add(cvm);
+            }
+
+            return lancamentoViewModel;
         }
     }
 }

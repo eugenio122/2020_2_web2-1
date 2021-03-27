@@ -42,7 +42,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Descricao")
+                    b.Property<string>("DescCategoria")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 

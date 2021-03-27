@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
+using FinanceManagement.Models.ViewModels;
 
 namespace FinanceManagement.Controllers
 {
@@ -16,25 +17,26 @@ namespace FinanceManagement.Controllers
 
         public LancamentosController(FinanceManagementContext context)
         {
+
             _context = context;
         }
 
         // GET: Lancamentoes
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Lancamentos.ToListAsync());
+            return View(this.IndexLancamentoViewModel());
         }
 
         // GET: Lancamentoes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var lancamento = await _context.Lancamentos
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var lancamento = this.IndexLancamentoViewModel().FirstOrDefault(x => x.Id == id);
+            
             if (lancamento == null)
             {
                 return NotFound();
@@ -43,13 +45,20 @@ namespace FinanceManagement.Controllers
             return View(lancamento);
         }
 
-        private int categoriaId = 0;
         // GET: Lancamentoes/Create
         public IActionResult Create()
         {
             //ViewBag.Categorias = _context.Categorias.Select(c => new SelectListItem() { Text = c.Descricao, Value = c.Id.ToString() }).ToList();
 
-           var categoriasList = _context.Categorias.Select(c => new SelectListItem() { Text = c.Descricao, Value = c.Id.ToString(), Selected = true }).ToList();
+            var categoriasList =
+                 _context.Categorias.Select
+                 (
+                     c => new SelectListItem()
+                     {
+                         Text = c.DescCategoria,
+                         Value = c.Id.ToString()
+                     }
+                 ).ToList();
 
             categoriasList.Insert(0, new SelectListItem()
             {
@@ -58,7 +67,7 @@ namespace FinanceManagement.Controllers
             });
 
             ViewBag.Categorias = categoriasList;
-            
+
             return View();
         }
 
@@ -69,16 +78,17 @@ namespace FinanceManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Descricao,Valor,Data,DespesaReceita,Categoria")] Lancamento lancamento)
         {
-            
+           
 
             if (ModelState.IsValid)
             {
                 
-
                 _context.Add(lancamento);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            
             return View(lancamento);
         }
 
@@ -166,5 +176,39 @@ namespace FinanceManagement.Controllers
         {
             return _context.Lancamentos.Any(e => e.Id == id);
         }
+
+        private List<LancamentoViewModel> IndexLancamentoViewModel()
+        {
+            List<LancamentoViewModel> lancamentoViewModel = new List<LancamentoViewModel>();
+
+            var lista = (from lan in _context.Lancamentos
+                         join cat in _context.Categorias on lan.Categoria.Id equals cat.Id
+                         select new
+                         {
+                             lan.Id,
+                             lan.Descricao,
+                             lan.Valor,
+                             lan.Data,
+                             lan.DespesaReceita,
+                             cat.DescCategoria
+                         }
+                        ).ToList();
+
+
+            foreach (var item in lista)
+            {
+                LancamentoViewModel lvm = new LancamentoViewModel();
+                lvm.Id = item.Id;
+                lvm.Descricao = item.Descricao;
+                lvm.Valor = item.Valor;
+                lvm.Data = item.Data;
+                lvm.DespesaReceita = item.DespesaReceita;
+                lvm.Categoria = item.DescCategoria;
+                lancamentoViewModel.Add(lvm);
+            }
+
+            return lancamentoViewModel;
+        }
+    
     }
 }

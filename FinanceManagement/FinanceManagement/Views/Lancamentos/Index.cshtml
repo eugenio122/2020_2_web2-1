@@ -1,10 +1,8 @@
-﻿@model IEnumerable<FinanceManagement.Models.Lancamento>
+﻿@model IEnumerable<FinanceManagement.Models.ViewModels.LancamentoViewModel>
 
 @{
     ViewData["Title"] = "Lançamentos";
 }
-
-<h1>Lançamentos</h1>
 
 <div>
     <p class="text-right">
@@ -18,19 +16,19 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Descricao)
+                        Descrição
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Valor)
+                        Valor
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Data)
+                        Data
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DespesaReceita)
+                        Despesa ou Receita
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Categoria.Descricao)
+                        Categoria
                     </th>
                     <th>Ações</th>
                 </tr>
@@ -46,13 +44,26 @@
                             @Html.DisplayFor(modelItem => item.Valor)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Data)
+                            @if (item.Data != null)
+                            {
+                                string data = item.Data.Date.ToString("dd/MM/yyyy");
+                                @Html.DisplayFor(modelItem => data)
+                            }
+
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DespesaReceita)
+                            @if (item.DespesaReceita)
+                            {
+                                <p>Receita</p>
+                            }
+                            else
+                            {
+                                <p>Despesa</p>
+                            }
+
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Categoria.Descricao)
+                            @Html.DisplayFor(modelItem => item.Categoria)
                         </td>
                         <td>
                             <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Detalhes"><span class="icon bi bi-info-circle"></span></a>

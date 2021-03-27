@@ -17,7 +17,7 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Descricao)
+                        @Html.DisplayNameFor(model => model.DescCategoria)
                     </th>
                     <th></th>
                 </tr>
@@ -27,7 +27,7 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Descricao)
+                            @Html.DisplayFor(modelItem => item.DescCategoria)
                         </td>
                         <td>
                             <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Detalhes"><span class="icon bi bi-info-circle"></span></a>

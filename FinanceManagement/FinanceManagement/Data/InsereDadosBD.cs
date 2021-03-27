@@ -56,11 +56,11 @@ namespace FinanceManagement.Data
 
         private void AddCategorias()
         {
-            var lazer = new Categoria { Descricao = "Lazer" };
-            var compras = new Categoria { Descricao = "Compras" };
-            var internet = new Categoria { Descricao = "Internet" };
-            var netflix = new Categoria { Descricao = "Netflix" };
-            this.context.Categorias.AddRange(lazer, compras, internet, netflix);
+            var lazer = new Categoria { DescCategoria = "Lazer" };
+            var compras = new Categoria { DescCategoria = "Compras" };
+            var internet = new Categoria { DescCategoria = "Internet" };
+            var Assinatura = new Categoria { DescCategoria = "Assinatura" };
+            this.context.Categorias.AddRange(lazer, compras, internet, Assinatura);
         }
 
         private void AddBancos()
