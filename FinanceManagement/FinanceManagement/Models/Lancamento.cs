@@ -20,7 +20,7 @@ namespace FinanceManagement.Models
 
         public bool DespesaReceita { get; set; }
 
-        public Usuario Usuario { get; set; }
+        public ApplicationUser Usuario { get; set; }
 
         public Categoria Categoria { get; set; }
 

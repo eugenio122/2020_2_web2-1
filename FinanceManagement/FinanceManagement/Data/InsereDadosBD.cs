@@ -9,9 +9,9 @@ namespace FinanceManagement.Data
 {
     public class InsereDadosBD
     {
-        private readonly FinanceManagementContext context;
+        private readonly ApplicationDbContext context;
 
-        public InsereDadosBD(FinanceManagementContext context)
+        public InsereDadosBD(ApplicationDbContext context)
         {
             this.context = context;
         }
@@ -49,8 +49,8 @@ namespace FinanceManagement.Data
 
         private void AddUsuario()
         {
-            var usuario = new Usuario { Nome = "Admin", Email = "admin@admin.com", Senha = "admin@2021" };
-            var dependente = new Usuario { Nome = "Dependente", Email = "dependente@gmail.com", Senha = "admin@2021" };
+            var usuario = new ApplicationUser { Nome = "Admin", Email = "admin@admin.com", Senha = "admin@2021" };
+            var dependente = new ApplicationUser { Nome = "Dependente", Email = "dependente@gmail.com", Senha = "admin@2021" };
             this.context.Usuarios.AddRange(usuario, dependente);
         }
 
