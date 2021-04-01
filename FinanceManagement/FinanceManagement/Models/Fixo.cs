@@ -15,6 +15,6 @@ namespace FinanceManagement.Models
         [MaxLength(250)]
         public string Descricao { get; set; }
 
-        public FixoParcelado? FixoParcelados { get; set; }
+        public Lancamento? Lancamentos { get; set; }
     }
 }

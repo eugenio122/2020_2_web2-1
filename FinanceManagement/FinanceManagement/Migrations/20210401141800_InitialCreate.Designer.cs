@@ -10,16 +10,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210331011302_InitialCreate")]
+    [Migration("20210401141800_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("FinanceManagement.Models.ApplicationUser", b =>
                 {
@@ -104,7 +104,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Nome")
                         .HasMaxLength(250)
@@ -120,7 +120,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("DescCategoria")
                         .HasMaxLength(250)
@@ -136,7 +136,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("BancoId")
                         .HasColumnType("int");
@@ -165,7 +165,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(250)
@@ -176,38 +176,12 @@ namespace FinanceManagement.Migrations
                     b.ToTable("Fixos");
                 });
 
-            modelBuilder.Entity("FinanceManagement.Models.FixoParcelado", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int?>("FixoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ParceladoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FixoId")
-                        .IsUnique()
-                        .HasFilter("[FixoId] IS NOT NULL");
-
-                    b.HasIndex("ParceladoId")
-                        .IsUnique()
-                        .HasFilter("[ParceladoId] IS NOT NULL");
-
-                    b.ToTable("FixoParcelados");
-                });
-
             modelBuilder.Entity("FinanceManagement.Models.Lancamento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CategoriaId")
                         .HasColumnType("int");
@@ -225,7 +199,13 @@ namespace FinanceManagement.Migrations
                     b.Property<bool>("DespesaReceita")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("FixoParceladoId")
+                    b.Property<int?>("FixoId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("FixoParcelado")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ParceladoId")
                         .HasColumnType("int");
 
                     b.Property<string>("UsuarioId")
@@ -240,7 +220,13 @@ namespace FinanceManagement.Migrations
 
                     b.HasIndex("ContaId");
 
-                    b.HasIndex("FixoParceladoId");
+                    b.HasIndex("FixoId")
+                        .IsUnique()
+                        .HasFilter("[FixoId] IS NOT NULL");
+
+                    b.HasIndex("ParceladoId")
+                        .IsUnique()
+                        .HasFilter("[ParceladoId] IS NOT NULL");
 
                     b.HasIndex("UsuarioId");
 
@@ -252,7 +238,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("PeriodoId")
                         .HasColumnType("int");
@@ -272,7 +258,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(250)
@@ -288,7 +274,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Tipo")
                         .HasMaxLength(250)
@@ -434,7 +420,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -458,7 +444,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -561,21 +547,6 @@ namespace FinanceManagement.Migrations
                     b.Navigation("TipoConta");
                 });
 
-            modelBuilder.Entity("FinanceManagement.Models.FixoParcelado", b =>
-                {
-                    b.HasOne("FinanceManagement.Models.Fixo", "Fixo")
-                        .WithOne("FixoParcelados")
-                        .HasForeignKey("FinanceManagement.Models.FixoParcelado", "FixoId");
-
-                    b.HasOne("FinanceManagement.Models.Parcelado", "Parcelado")
-                        .WithOne("FixoParcelados")
-                        .HasForeignKey("FinanceManagement.Models.FixoParcelado", "ParceladoId");
-
-                    b.Navigation("Fixo");
-
-                    b.Navigation("Parcelado");
-                });
-
             modelBuilder.Entity("FinanceManagement.Models.Lancamento", b =>
                 {
                     b.HasOne("FinanceManagement.Models.Categoria", "Categoria")
@@ -586,9 +557,13 @@ namespace FinanceManagement.Migrations
                         .WithMany("Lancamentos")
                         .HasForeignKey("ContaId");
 
-                    b.HasOne("FinanceManagement.Models.FixoParcelado", "FixoParcelado")
-                        .WithMany("Lancamentos")
-                        .HasForeignKey("FixoParceladoId");
+                    b.HasOne("FinanceManagement.Models.Fixo", "Fixo")
+                        .WithOne("Lancamentos")
+                        .HasForeignKey("FinanceManagement.Models.Lancamento", "FixoId");
+
+                    b.HasOne("FinanceManagement.Models.Parcelado", "Parcelado")
+                        .WithOne("Lancamentos")
+                        .HasForeignKey("FinanceManagement.Models.Lancamento", "ParceladoId");
 
                     b.HasOne("FinanceManagement.Models.ApplicationUser", "Usuario")
                         .WithMany("Lancamentos")
@@ -598,7 +573,9 @@ namespace FinanceManagement.Migrations
 
                     b.Navigation("Conta");
 
-                    b.Navigation("FixoParcelado");
+                    b.Navigation("Fixo");
+
+                    b.Navigation("Parcelado");
 
                     b.Navigation("Usuario");
                 });
@@ -687,17 +664,12 @@ namespace FinanceManagement.Migrations
 
             modelBuilder.Entity("FinanceManagement.Models.Fixo", b =>
                 {
-                    b.Navigation("FixoParcelados");
-                });
-
-            modelBuilder.Entity("FinanceManagement.Models.FixoParcelado", b =>
-                {
                     b.Navigation("Lancamentos");
                 });
 
             modelBuilder.Entity("FinanceManagement.Models.Parcelado", b =>
                 {
-                    b.Navigation("FixoParcelados");
+                    b.Navigation("Lancamentos");
                 });
 
             modelBuilder.Entity("FinanceManagement.Models.Periodo", b =>

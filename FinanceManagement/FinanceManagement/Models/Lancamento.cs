@@ -24,7 +24,13 @@ namespace FinanceManagement.Models
 
         public Categoria Categoria { get; set; }
 
-        public FixoParcelado FixoParcelado { get; set; }
+        public bool FixoParcelado { get; set; }
+
+        public int? FixoId { get; set; }
+        public Fixo Fixo { get; set; }
+
+        public int? ParceladoId { get; set; }
+        public Parcelado Parcelado { get; set; }
 
         public Conta Conta { get; set; }
     }

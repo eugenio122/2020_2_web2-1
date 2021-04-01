@@ -31,8 +31,6 @@ namespace FinanceManagement.Data
 
         public DbSet<Fixo> Fixos { get; set; }
 
-        public DbSet<FixoParcelado> FixoParcelados { get; set; }
-
         public DbSet<Lancamento> Lancamentos { get; set; }
 
         public DbSet<Parcelado> Parcelados { get; set; }

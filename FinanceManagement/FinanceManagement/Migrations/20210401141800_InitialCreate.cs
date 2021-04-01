@@ -314,32 +314,6 @@ namespace FinanceManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FixoParcelados",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FixoId = table.Column<int>(type: "int", nullable: true),
-                    ParceladoId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FixoParcelados", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FixoParcelados_Fixos_FixoId",
-                        column: x => x.FixoId,
-                        principalTable: "Fixos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_FixoParcelados_Parcelados_ParceladoId",
-                        column: x => x.ParceladoId,
-                        principalTable: "Parcelados",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Lancamentos",
                 columns: table => new
                 {
@@ -351,7 +325,9 @@ namespace FinanceManagement.Migrations
                     DespesaReceita = table.Column<bool>(type: "bit", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CategoriaId = table.Column<int>(type: "int", nullable: true),
-                    FixoParceladoId = table.Column<int>(type: "int", nullable: true),
+                    FixoParcelado = table.Column<bool>(type: "bit", nullable: false),
+                    FixoId = table.Column<int>(type: "int", nullable: true),
+                    ParceladoId = table.Column<int>(type: "int", nullable: true),
                     ContaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -376,9 +352,15 @@ namespace FinanceManagement.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Lancamentos_FixoParcelados_FixoParceladoId",
-                        column: x => x.FixoParceladoId,
-                        principalTable: "FixoParcelados",
+                        name: "FK_Lancamentos_Fixos_FixoId",
+                        column: x => x.FixoId,
+                        principalTable: "Fixos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Lancamentos_Parcelados_ParceladoId",
+                        column: x => x.ParceladoId,
+                        principalTable: "Parcelados",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -449,20 +431,6 @@ namespace FinanceManagement.Migrations
                 column: "Expiration");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FixoParcelados_FixoId",
-                table: "FixoParcelados",
-                column: "FixoId",
-                unique: true,
-                filter: "[FixoId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FixoParcelados_ParceladoId",
-                table: "FixoParcelados",
-                column: "ParceladoId",
-                unique: true,
-                filter: "[ParceladoId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Lancamentos_CategoriaId",
                 table: "Lancamentos",
                 column: "CategoriaId");
@@ -473,9 +441,18 @@ namespace FinanceManagement.Migrations
                 column: "ContaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lancamentos_FixoParceladoId",
+                name: "IX_Lancamentos_FixoId",
                 table: "Lancamentos",
-                column: "FixoParceladoId");
+                column: "FixoId",
+                unique: true,
+                filter: "[FixoId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lancamentos_ParceladoId",
+                table: "Lancamentos",
+                column: "ParceladoId",
+                unique: true,
+                filter: "[ParceladoId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lancamentos_UsuarioId",
@@ -542,19 +519,16 @@ namespace FinanceManagement.Migrations
                 name: "Contas");
 
             migrationBuilder.DropTable(
-                name: "FixoParcelados");
+                name: "Fixos");
+
+            migrationBuilder.DropTable(
+                name: "Parcelados");
 
             migrationBuilder.DropTable(
                 name: "Bancos");
 
             migrationBuilder.DropTable(
                 name: "TipoContas");
-
-            migrationBuilder.DropTable(
-                name: "Fixos");
-
-            migrationBuilder.DropTable(
-                name: "Parcelados");
 
             migrationBuilder.DropTable(
                 name: "Periodos");

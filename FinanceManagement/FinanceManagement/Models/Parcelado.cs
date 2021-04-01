@@ -13,6 +13,6 @@ namespace FinanceManagement.Models
 
         public Periodo Periodo { get; set; }
 
-        public FixoParcelado? FixoParcelados { get; set; }
+        public Lancamento? Lancamentos { get; set; }
     }
 }
