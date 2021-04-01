@@ -1,3 +1,4 @@
+using System.IO;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -28,7 +29,7 @@ namespace FinanceManagement
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("EugenioPC")));
+                    Configuration.GetConnectionString("AlanPC")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -60,6 +61,7 @@ namespace FinanceManagement
             });
 
             services.AddScoped<InsereDadosBD>();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,7 +99,7 @@ namespace FinanceManagement
 
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = Path.Join(env.ContentRootPath, "ClientApp");
 
                 if (env.IsDevelopment())
                 {

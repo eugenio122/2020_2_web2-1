@@ -2,6 +2,11 @@
   white-space: normal;
   text-align: center;
   word-break: break-all;
+  color: white !important;
+}
+
+.navbar{
+    background-color: green;
 }
 
 html {

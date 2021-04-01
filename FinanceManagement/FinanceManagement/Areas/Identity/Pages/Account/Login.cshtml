@@ -1,0 +1,42 @@
+@page
+@model LoginModel
+
+@{ ViewData["Title"] = "Login"; }
+
+<div>
+    <div class="container-menu">
+        <section class="section-menu">
+            <form id="account" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label asp-for="Input.Email">Email</label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="margin-bottom: 5px;">
+                    <label asp-for="Input.Password">Senha</label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe">
+                            <input asp-for="Input.RememberMe" />
+                            Lembrar de mim
+                        </label>
+                    </div>
+                </div>
+                <div style="width: 100%; margin-top: 20px;">
+                    <button type="submit" class="btn btn-success" style="width: 100%;">Login</button>
+                </div>
+                <div style="width: 100%; margin-top: 20px;">
+                    <a class="btn btn-secondary" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="width: 100%;">Cadastre-se</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
