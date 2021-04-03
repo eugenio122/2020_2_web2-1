@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210401141800_InitialCreate")]
+    [Migration("20210403011608_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,9 +201,6 @@ namespace FinanceManagement.Migrations
 
                     b.Property<int?>("FixoId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("FixoParcelado")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("ParceladoId")
                         .HasColumnType("int");

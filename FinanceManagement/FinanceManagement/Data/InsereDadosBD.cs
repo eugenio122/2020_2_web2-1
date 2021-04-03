@@ -37,8 +37,12 @@ namespace FinanceManagement.Data
 
             this.AddPeriodo();
 
+            this.AddContas();
+
             this.context.SaveChanges();
         }
+
+        private TipoConta outros;
 
         private void AddRoles()
         {
@@ -78,7 +82,7 @@ namespace FinanceManagement.Data
             var corrente = new TipoConta { Tipo = "Conta Corrente" };
             var poupanca = new TipoConta { Tipo = "Conta Poupança" };
             var investimento = new TipoConta { Tipo = "Investimentos" };
-            var outros = new TipoConta { Tipo = "Outros" };
+            outros = new TipoConta { Tipo = "Outros" };
             this.context.TipoContas.AddRange(corrente, poupanca, investimento, outros);
         }
 
@@ -108,6 +112,11 @@ namespace FinanceManagement.Data
             this.context.Periodos.AddRange(dias, semanas, quinzenas, meses, bimestres, trimestres, semestres, anos);
         }
 
-        
+        private void AddContas()
+        {
+            var data = new Conta { Descricao = "Carteira Virtual", Saldo = 0.0, TipoConta = outros };
+            this.context.Contas.AddRange(data);
+        }
+
     }
 }

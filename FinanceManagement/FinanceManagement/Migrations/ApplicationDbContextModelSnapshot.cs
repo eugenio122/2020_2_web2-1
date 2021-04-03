@@ -200,9 +200,6 @@ namespace FinanceManagement.Migrations
                     b.Property<int?>("FixoId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("FixoParcelado")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("ParceladoId")
                         .HasColumnType("int");
 
