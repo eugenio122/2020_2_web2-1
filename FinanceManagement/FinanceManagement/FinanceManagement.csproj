@@ -37,6 +37,11 @@
     <None Remove="ScaffoldingReadMe.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ClientApp\src\components\Lancamentos\" />
+    <Folder Include="ClientApp\src\components\contas\" />
+    <Folder Include="ClientApp\src\helpers\" />
+  </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

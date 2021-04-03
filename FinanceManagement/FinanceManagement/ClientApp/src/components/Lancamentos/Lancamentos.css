@@ -1,0 +1,57 @@
+﻿.container-lancamentos {
+    margin-top: 40px;
+}
+
+.container-type-lancamento{
+    display:flex;
+}
+
+.type-lancamento{
+    border: 1px solid #ced4da;
+    flex:1;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.despesa{
+    margin-right: 5px;
+    color: red;
+}
+
+.receita{
+    margin-left: 5px;
+    color: green;
+}
+
+.type-lancamento:hover{
+    background-color: #f2f2f2;
+}
+
+.despesa-active {
+    background-color: rgb(255 0 0 / 10%);
+    border-color: red;
+}
+
+.receita-active {
+    background-color: rgb(51 204 51 / 10%);
+    border-color: green;
+}
+
+.despesa-active:hover {
+    background-color: rgb(255 0 0 / 10%);
+}
+
+.receita-active:hover {
+    background-color: rgb(51 204 51 / 10%);
+}
+
+.invalid-form {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}

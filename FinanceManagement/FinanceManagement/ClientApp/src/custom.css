@@ -1,14 +1,86 @@
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 code {
-  color: #E01A76;
+    color: #E01A76;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgb(51 204 51 / 35%) !important;
+    border-color: green;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.ui.selection.dropdown {
+    cursor: pointer;
+    word-wrap: break-word;
+    line-height: 1.5;
+    white-space: normal;
+    outline: 0;
+    transform: rotateZ(0);
+    height: calc(1.5em + 0.75rem + 2px) !important;
+    min-height: auto !important;
+    background: #fff;
+    display: block;
+    padding: 0.375rem 0.75rem;
+    color: #495057;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    font-weight: 400;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.ui.selection.active.dropdown .menu {
+    border-color: green !important;
+}
+
+.ui.selection.active.dropdown:hover {
+    box-shadow: 0 0 0 0.25rem rgb(51 204 51 / 35%) !important;
+    border-color: green !important;
+}
+
+.ui.selection.active.dropdown {
+    border-color: green !important;
+}
+
+.ui.selection.dropdown:focus {
+    border-color: green !important;
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.25rem rgb(255 0 0 / 20%) !important;
+}
+
+.ui.selection.dropdown.error {
+    background: #fff6f6;
+    border-color: #dc3545 !important;
+}
+
+input[type="checkbox"] {
+    color: green !important;
+    background-color: green !important;
 }

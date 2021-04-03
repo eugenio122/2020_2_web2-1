@@ -24,8 +24,6 @@ namespace FinanceManagement.Models
 
         public Categoria Categoria { get; set; }
 
-        public bool FixoParcelado { get; set; }
-
         public int? FixoId { get; set; }
         public Fixo Fixo { get; set; }
 

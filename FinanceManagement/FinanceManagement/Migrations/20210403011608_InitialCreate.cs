@@ -325,7 +325,6 @@ namespace FinanceManagement.Migrations
                     DespesaReceita = table.Column<bool>(type: "bit", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CategoriaId = table.Column<int>(type: "int", nullable: true),
-                    FixoParcelado = table.Column<bool>(type: "bit", nullable: false),
                     FixoId = table.Column<int>(type: "int", nullable: true),
                     ParceladoId = table.Column<int>(type: "int", nullable: true),
                     ContaId = table.Column<int>(type: "int", nullable: true)
