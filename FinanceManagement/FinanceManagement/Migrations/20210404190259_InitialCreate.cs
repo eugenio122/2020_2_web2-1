@@ -106,7 +106,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                    DescFixo = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -119,7 +119,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                    DescPeriodo = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -272,7 +272,7 @@ namespace FinanceManagement.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantidade = table.Column<int>(type: "int", nullable: false),
-                    PeriodoId = table.Column<int>(type: "int", nullable: true)
+                    PeriodoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -282,7 +282,7 @@ namespace FinanceManagement.Migrations
                         column: x => x.PeriodoId,
                         principalTable: "Periodos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -291,7 +291,7 @@ namespace FinanceManagement.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    DescConta = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Saldo = table.Column<double>(type: "float", nullable: false),
                     BancoId = table.Column<int>(type: "int", nullable: true),
                     TipoContaId = table.Column<int>(type: "int", nullable: true)
@@ -324,10 +324,10 @@ namespace FinanceManagement.Migrations
                     Data = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DespesaReceita = table.Column<bool>(type: "bit", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CategoriaId = table.Column<int>(type: "int", nullable: true),
+                    CategoriaId = table.Column<int>(type: "int", nullable: false),
                     FixoId = table.Column<int>(type: "int", nullable: true),
                     ParceladoId = table.Column<int>(type: "int", nullable: true),
-                    ContaId = table.Column<int>(type: "int", nullable: true)
+                    ContaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -343,13 +343,13 @@ namespace FinanceManagement.Migrations
                         column: x => x.CategoriaId,
                         principalTable: "Categorias",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Lancamentos_Contas_ContaId",
                         column: x => x.ContaId,
                         principalTable: "Contas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Lancamentos_Fixos_FixoId",
                         column: x => x.FixoId,

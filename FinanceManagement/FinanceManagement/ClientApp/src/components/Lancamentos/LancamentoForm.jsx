@@ -54,7 +54,7 @@ export default function LancamentoForm(props) {
 
         const data = await response.json();
 
-        const contasOpts = data.map(conta => ({ id: conta.id, text: conta.descricao, value: conta.id }))
+        const contasOpts = data.map(conta => ({ id: conta.id, text: conta.descConta, value: conta.id }))
         setContasOptions(contasOpts)
     }
 
@@ -77,7 +77,7 @@ export default function LancamentoForm(props) {
 
         const data = await response.json();
 
-        const periodoOpts = data.map(periodo => ({ id: periodo.id, text: periodo.descricao, value: periodo.id }))
+        const periodoOpts = data.map(periodo => ({ id: periodo.id, text: periodo.descPeriodo, value: periodo.id }))
         setPeriodosOptions(periodoOpts)
     }
 
@@ -89,7 +89,7 @@ export default function LancamentoForm(props) {
 
         const data = await response.json();
 
-        const fixosOpts = data.map(fixo => ({ id: fixo.id, text: fixo.descricao, value: fixo.id }))
+        const fixosOpts = data.map(fixo => ({ id: fixo.id, text: fixo.descFixo, value: fixo.id }))
         setFixosOptions(fixosOpts)
     }
 

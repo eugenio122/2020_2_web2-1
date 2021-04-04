@@ -13,7 +13,7 @@ namespace FinanceManagement.Models
         public int Id { get; set; }
 
         [MaxLength(250)]
-        public string Descricao { get; set; }
+        public string DescPeriodo { get; set; }
 
         public ICollection<Parcelado> Pacelados { get; set; }
     }

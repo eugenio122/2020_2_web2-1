@@ -33,7 +33,7 @@ namespace FinanceManagement.Controllers
         public async Task<ActionResult<Categoria>> GetCategoria(int id)
         {
             var categoria = await _context.Categorias.FindAsync(id);
-
+            
             if (categoria == null)
             {
                 return NotFound();

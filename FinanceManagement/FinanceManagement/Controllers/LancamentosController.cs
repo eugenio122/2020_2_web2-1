@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using FinanceManagement.Models.ViewModels;
 
 namespace FinanceManagement.Controllers
 {
@@ -15,17 +16,70 @@ namespace FinanceManagement.Controllers
     public class LancamentosController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public LancamentosController(ApplicationDbContext context)
+        public LancamentosController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+
         }
 
         // GET: api/Lancamentos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Lancamento>>> GetLancamentos()
+        public ActionResult<IEnumerable<LancamentoViewModel>> GetLancamentos()
         {
-            return await _context.Lancamentos.ToListAsync();
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = this.GetUsuarioLogado();
+
+                List<LancamentoViewModel> lancamentoViewModel = new List<LancamentoViewModel>();
+                var lista = (from lan in _context.Lancamentos
+                             join usr in _context.Usuarios on lan.Usuario.Id equals usr.Id
+                             join cat in _context.Categorias on lan.CategoriaId equals cat.Id
+                             join con in _context.Contas on lan.ContaId equals con.Id
+                              
+                             where (usr.Id == userId)
+
+                             select new
+                             {
+                                 lan.Id,
+                                 lan.Descricao,
+                                 lan.Valor,
+                                 lan.Data,
+                                 lan.DespesaReceita,
+                                 cat.DescCategoria,
+                                 con.DescConta
+                             }
+                            ).Distinct().OrderBy(x => x.Data).ToList();
+
+                foreach (var item in lista)
+                {
+                    LancamentoViewModel lvm = new LancamentoViewModel();
+                    lvm.Id = item.Id;
+                    lvm.Descricao = item.Descricao;
+                    lvm.Valor = item.Valor;
+                    lvm.Data = item.Data;
+                    lvm.DespesaReceita = item.DespesaReceita;
+                    lvm.Categoria = item.DescCategoria;
+                    lvm.Conta = item.DescConta;
+                    
+                    lancamentoViewModel.Add(lvm);
+                }
+
+                return lancamentoViewModel;
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        private string GetUsuarioLogado()
+        {
+            return this.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         // GET: api/Lancamentos/5
@@ -73,13 +127,20 @@ namespace FinanceManagement.Controllers
             return NoContent();
         }
 
+
         // POST: api/Lancamentos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Lancamento>> PostLancamento(Lancamento lancamento)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var usuario = await _context.Usuarios.FindAsync(userId);
+
+            lancamento.Usuario = usuario;
+            
             _context.Lancamentos.Add(lancamento);
             await _context.SaveChangesAsync();
+
 
             return CreatedAtAction("GetLancamento", new { id = lancamento.Id }, lancamento);
         }
@@ -103,6 +164,19 @@ namespace FinanceManagement.Controllers
         private bool LancamentoExists(int id)
         {
             return _context.Lancamentos.Any(e => e.Id == id);
+        }
+
+        [HttpGet("{Email}")]
+        public async Task<ActionResult<IEnumerable<Lancamento>>> GetLancamentosByUser(string email)
+        {
+            var lancamento = await _context.Lancamentos.Where(x => x.Usuario.Email == email).ToListAsync();
+
+            if (lancamento == null)
+            {
+                return NotFound();
+            }
+
+            return lancamento;
         }
     }
 }

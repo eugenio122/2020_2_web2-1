@@ -139,7 +139,7 @@ namespace FinanceManagement.Migrations
                     b.Property<int?>("BancoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Descricao")
+                    b.Property<string>("DescConta")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -165,7 +165,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Descricao")
+                    b.Property<string>("DescFixo")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -181,10 +181,10 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoriaId")
+                    b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ContaId")
+                    b.Property<int>("ContaId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
@@ -235,7 +235,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("PeriodoId")
+                    b.Property<int>("PeriodoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantidade")
@@ -255,7 +255,7 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Descricao")
+                    b.Property<string>("DescPeriodo")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -546,11 +546,15 @@ namespace FinanceManagement.Migrations
                 {
                     b.HasOne("FinanceManagement.Models.Categoria", "Categoria")
                         .WithMany("Lancamentos")
-                        .HasForeignKey("CategoriaId");
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FinanceManagement.Models.Conta", "Conta")
                         .WithMany("Lancamentos")
-                        .HasForeignKey("ContaId");
+                        .HasForeignKey("ContaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FinanceManagement.Models.Fixo", "Fixo")
                         .WithOne("Lancamentos")
@@ -579,7 +583,9 @@ namespace FinanceManagement.Migrations
                 {
                     b.HasOne("FinanceManagement.Models.Periodo", "Periodo")
                         .WithMany("Pacelados")
-                        .HasForeignKey("PeriodoId");
+                        .HasForeignKey("PeriodoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Periodo");
                 });

@@ -53,8 +53,8 @@ namespace FinanceManagement.Data
 
         private void AddUsuario()
         {
-            var usuario = new ApplicationUser { Nome = "Admin", Email = "admin@admin.com", Senha = "admin@2021" };
-            var dependente = new ApplicationUser { Nome = "Dependente", Email = "dependente@gmail.com", Senha = "admin@2021" };
+            var usuario = new ApplicationUser { Nome = "Admin", Email = "admin@admin.com", Senha = "admin@2021", EmailConfirmed = true };
+            var dependente = new ApplicationUser { Nome = "Dependente", Email = "dependente@gmail.com", Senha = "admin@2021", EmailConfirmed = true };
             this.context.Usuarios.AddRange(usuario, dependente);
         }
 
@@ -88,33 +88,33 @@ namespace FinanceManagement.Data
 
         private void AddFixo()
         {
-            var diario = new Fixo { Descricao = "Diário" };
-            var semanal = new Fixo { Descricao = "Semanal" };
-            var quinzenal = new Fixo { Descricao = "Quinzenal" };
-            var mensal = new Fixo { Descricao = "Mensal" };
-            var bimestral = new Fixo { Descricao = "Bimestral" };
-            var trimestral = new Fixo { Descricao = "Trimestral" };
-            var semestral = new Fixo { Descricao = "Semestral" };
-            var anual = new Fixo { Descricao = "Anual" };
+            var diario = new Fixo { DescFixo = "Diário" };
+            var semanal = new Fixo { DescFixo = "Semanal" };
+            var quinzenal = new Fixo { DescFixo = "Quinzenal" };
+            var mensal = new Fixo { DescFixo = "Mensal" };
+            var bimestral = new Fixo { DescFixo = "Bimestral" };
+            var trimestral = new Fixo { DescFixo = "Trimestral" };
+            var semestral = new Fixo { DescFixo = "Semestral" };
+            var anual = new Fixo { DescFixo = "Anual" };
             this.context.Fixos.AddRange(diario, semanal, quinzenal, mensal, bimestral, trimestral, semestral, anual);
         }
 
         private void AddPeriodo()
         {
-            var dias = new Periodo { Descricao = "Dias" };
-            var semanas = new Periodo { Descricao = "Semanas" };
-            var quinzenas = new Periodo { Descricao = "Quinzenas" };
-            var meses = new Periodo { Descricao = "Meses" };
-            var bimestres = new Periodo { Descricao = "Bimestres" };
-            var trimestres = new Periodo { Descricao = "Trimestres" };
-            var semestres = new Periodo { Descricao = "Semestres" };
-            var anos = new Periodo { Descricao = "Anos" };
+            var dias = new Periodo { DescPeriodo = "Dias" };
+            var semanas = new Periodo { DescPeriodo = "Semanas" };
+            var quinzenas = new Periodo { DescPeriodo = "Quinzenas" };
+            var meses = new Periodo { DescPeriodo = "Meses" };
+            var bimestres = new Periodo { DescPeriodo = "Bimestres" };
+            var trimestres = new Periodo { DescPeriodo = "Trimestres" };
+            var semestres = new Periodo { DescPeriodo = "Semestres" };
+            var anos = new Periodo { DescPeriodo = "Anos" };
             this.context.Periodos.AddRange(dias, semanas, quinzenas, meses, bimestres, trimestres, semestres, anos);
         }
 
         private void AddContas()
         {
-            var data = new Conta { Descricao = "Carteira Virtual", Saldo = 0.0, TipoConta = outros };
+            var data = new Conta { DescConta = "Carteira Virtual", Saldo = 0.0, TipoConta = outros };
             this.context.Contas.AddRange(data);
         }
 

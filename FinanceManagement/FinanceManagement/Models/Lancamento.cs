@@ -22,6 +22,7 @@ namespace FinanceManagement.Models
 
         public ApplicationUser Usuario { get; set; }
 
+        public int CategoriaId { get; set; }
         public Categoria Categoria { get; set; }
 
         public int? FixoId { get; set; }
@@ -30,6 +31,7 @@ namespace FinanceManagement.Models
         public int? ParceladoId { get; set; }
         public Parcelado Parcelado { get; set; }
 
+        public int ContaId { get; set; }
         public Conta Conta { get; set; }
     }
 }

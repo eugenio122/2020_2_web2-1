@@ -1,9 +1,11 @@
 using System.IO;
+using FinanceManagement.Areas.Identity;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 namespace FinanceManagement
@@ -29,7 +32,7 @@ namespace FinanceManagement
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("AlanPC")));
+                    Configuration.GetConnectionString("EugenioPC")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -60,8 +63,23 @@ namespace FinanceManagement
                 options.Password.RequireUppercase = false;
             });
 
+
+
+            services.AddControllersWithViews();
+
+
             services.AddScoped<InsereDadosBD>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

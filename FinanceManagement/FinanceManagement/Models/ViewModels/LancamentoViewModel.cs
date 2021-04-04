@@ -19,5 +19,11 @@ namespace FinanceManagement.Models.ViewModels
         public string Categoria { get; set; }
 
         public string Conta { get; set; }
+
+        public string Fixo { get; set; }
+
+        public string Parcelado { get; set; }
+
+        public int Quantidade { get; set; }
     }
 }
