@@ -40,7 +40,7 @@ namespace FinanceManagement.Controllers
                              join usr in _context.Usuarios on lan.Usuario.Id equals usr.Id
                              join cat in _context.Categorias on lan.CategoriaId equals cat.Id
                              join con in _context.Contas on lan.ContaId equals con.Id
-                              
+
                              where (usr.Id == userId)
 
                              select new
@@ -65,7 +65,7 @@ namespace FinanceManagement.Controllers
                     lvm.DespesaReceita = item.DespesaReceita;
                     lvm.Categoria = item.DescCategoria;
                     lvm.Conta = item.DescConta;
-                    
+
                     lancamentoViewModel.Add(lvm);
                 }
 
@@ -137,7 +137,7 @@ namespace FinanceManagement.Controllers
             var usuario = await _context.Usuarios.FindAsync(userId);
 
             lancamento.Usuario = usuario;
-            
+
             _context.Lancamentos.Add(lancamento);
             await _context.SaveChangesAsync();
 

@@ -84,3 +84,11 @@ input[type="checkbox"] {
     color: green !important;
     background-color: green !important;
 }
+
+.debit {
+    color: red;
+}
+
+.credit {
+    color: green;
+}

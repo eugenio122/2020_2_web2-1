@@ -1,4 +1,6 @@
-﻿export const removeNoNumeric = (val) => {
+﻿import numeral from 'numeral'
+
+export const removeNoNumeric = (val) => {
     if (val === undefined || val === null) return val;
     return val.toString().replace(/[^\d]+/g, '');
 };
@@ -39,4 +41,8 @@ export const moneyInputFormatToFloat = (inputText) => {
     } catch (ex) {
         return 0;
     }
+};
+
+export const moneyLabel = (value: string | number) => {
+    return numeral(value).format('$ 0,0.00');
 };
