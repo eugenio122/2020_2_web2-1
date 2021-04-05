@@ -80,7 +80,7 @@ export default function LancamentosList() {
                                     <td>{format(new Date(lancamento.data), 'dd/MM/yyyy', { locale: br })}</td>
                                     <td>{lancamento.conta}</td>
                                     <td>
-                                        <Button outline color='info' id='tooltip-edit'><Icon name='edit' /></Button>{' '}
+                                        {/*<Button outline color='info' id='tooltip-edit'><Icon name='edit' /></Button>{' '}
                                         <Tooltip
                                             placement='top'
                                             isOpen={tooltipEdit === lancamento.id}
@@ -88,7 +88,7 @@ export default function LancamentosList() {
                                             toggle={() => !tooltipEdit ? setTooltipEdit(lancamento.id) : setTooltipEdit('')}
                                         >
                                             Editar lançamento
-                                        </Tooltip>
+                                        </Tooltip>*/}
                                         <Button outline color='danger' id='tooltip-delete' onClick={() => deleteLancamento(lancamento.id)}><Icon name='trash' /></Button>
                                         <Tooltip
                                             placement='top'
