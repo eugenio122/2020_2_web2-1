@@ -84,3 +84,19 @@ input[type="checkbox"] {
     color: green !important;
     background-color: green !important;
 }
+
+.debit {
+    color: red;
+}
+
+.credit {
+    color: green;
+}
+
+.container-tab-menu{
+    margin-bottom: 40px
+}
+
+.cursor-pointer {
+    cursor: pointer
+}
