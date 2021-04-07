@@ -5,6 +5,7 @@ import authService from '../api-authorization/AuthorizeService';
 import { Modal, Form, ModalHeader, ModalBody, FormGroup, Label, Input, Row, Col, Button, FormFeedback, Toast } from 'reactstrap';
 import { Icon, Dropdown } from 'semantic-ui-react';
 import { moneyInputFormat, moneyInputFormatToFloat } from '../../helpers/FnUtils'
+import { format } from 'date-fns'
 
 import ContaForm from '../contas/ContaForm'
 
@@ -33,6 +34,31 @@ export default function LancamentoForm(props) {
         getFixos()
     }, [])
 
+    useEffect(() => {
+        if (props.lancamentoEdit) {
+            getLancamentoEdit()
+        }
+    }, [props.lancamentoEdit])
+
+    function getLancamentoEdit() {
+        const lancamento = props.lancamentoEdit
+        console.log(contasOptions)
+        if (lancamento) {
+            setFormData({
+                tipo: lancamento.despesaReceita ? 'despesa' : 'receita',
+                descricao: lancamento.descricao,
+                valor: `${lancamento.despesaReceita ? `-R$${moneyInputFormat(lancamento.valor.toFixed(2))}` : `R$${moneyInputFormat(lancamento.valor.toFixed(2))}`}`,
+                data: format(new Date(lancamento.data), 'yyyy-MM-dd'),
+                categoria: categoriasOptions.find(cat => cat.text === lancamento.categoria) ?
+                    categoriasOptions.find(cat => cat.text === lancamento.categoria).id : '',
+                conta: contasOptions.find(conta => conta.text === lancamento.conta) ?
+                    contasOptions.find(conta => conta.text === lancamento.conta).id : ''
+            })
+        }
+    }
+
+    console.log(formData)
+
     async function getCategorias(newCat) {
         const token = await authService.getAccessToken();
         const response = await fetch('api/categorias', {
@@ -43,7 +69,10 @@ export default function LancamentoForm(props) {
 
         const cats = data.map(cat => ({ id: cat.id, text: cat.descCategoria, value: cat.id }))
         setCategoriasOptions(cats)
-        setFormData({ ...formData, categoria: cats.find(cat => cat.text === newCat) ? cats.find(cat => cat.text === newCat).id : '' })
+        setFormData({
+            ...formData, categoria: cats.find(cat => cat.text === newCat) ? cats.find(cat => cat.text === newCat).id : ''
+        })
+
     }
 
     async function getContas() {
@@ -150,18 +179,34 @@ export default function LancamentoForm(props) {
             usuarioId: props.user.sub
         }
 
-        const token = await authService.getAccessToken();
-        const response = await fetch('api/lancamentos', {
-            headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
+        if (props.lancamentoEdit) {
+            const token = await authService.getAccessToken();
+            const response = await fetch(`api/lancamentos/${props.lancamentoEdit.id}`, {
+                headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                method: "PUT",
+                body: JSON.stringify(payload)
+            });
 
-        if (response.status === 201) {
-            props.getLancamentos()
-            resetForm()
-            props.setShowFormLancamento(false)
+            if (response.status === 201) {
+                props.getLancamentos()
+                resetForm()
+                props.setShowFormLancamento(false)
+            }
+        } else {
+            const token = await authService.getAccessToken();
+            const response = await fetch('api/lancamentos', {
+                headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            if (response.status === 201) {
+                props.getLancamentos()
+                resetForm()
+                props.setShowFormLancamento(false)
+            }
         }
+
     }
 
     return (
@@ -169,11 +214,17 @@ export default function LancamentoForm(props) {
             <Modal isOpen={props.showFormLancamento} toggle={() => {
                 props.setShowFormLancamento(false)
                 resetForm()
+                if (props.lancamentoEdit) {
+                    props.setLancamentoEdit(null)
+                }
             }}>
                 <ModalHeader toggle={() => {
                     props.setShowFormLancamento(false)
                     resetForm()
-                }}>Novo lançamento</ModalHeader>
+                    if (props.lancamentoEdit) {
+                        props.setLancamentoEdit(null)
+                    }
+                }}>{`${props.lancamentoEdit ? 'Editar lançamento' : 'Novo lançamento'}`}</ModalHeader>
                 <ModalBody>
                     <div>
                         <Form onSubmit={isParcelado ? addParcela : submitForm}>
@@ -193,6 +244,7 @@ export default function LancamentoForm(props) {
                                     invalid={errorsDataForm.descricao}
                                     name="description"
                                     id="form-description"
+                                    value={formData.descricao}
                                     placeholder="Insira a descrição"
                                     onChange={(event) => {
                                         setFormData({ ...formData, descricao: event.target.value })
@@ -231,6 +283,7 @@ export default function LancamentoForm(props) {
                                             type='date'
                                             invalid={errorsDataForm.data}
                                             name="date"
+                                            value={formData.data}
                                             id="form-date"
                                             onChange={(event) => {
                                                 setFormData({ ...formData, data: event.target.value })
@@ -368,7 +421,7 @@ export default function LancamentoForm(props) {
                                     color='success'
                                     style={{ width: '100%' }}
                                 >
-                                    Lançar
+                                    {`${props.lancamentoEdit ? 'Editar' : 'Salvar'}`}
                                 </Button>
                             </FormGroup>
                         </Form>

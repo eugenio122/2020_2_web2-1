@@ -92,3 +92,11 @@ input[type="checkbox"] {
 .credit {
     color: green;
 }
+
+.container-tab-menu{
+    margin-bottom: 40px
+}
+
+.cursor-pointer {
+    cursor: pointer
+}

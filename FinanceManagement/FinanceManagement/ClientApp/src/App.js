@@ -9,6 +9,7 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 
 import Lancamentos from './components/Lancamentos/LancamentosList'
+import ContasList from './components/contas/ContasList'
 
 import './custom.css'
 
@@ -19,8 +20,7 @@ export default class App extends Component {
         return (
             <Layout>
                 <AuthorizeRoute exact path='/' component={Lancamentos} />
-                <Route path='/counter' component={Counter} />
-                <AuthorizeRoute path='/fetch-data' component={FetchData} />
+                <AuthorizeRoute path='/contas' component={ContasList} />
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
             </Layout>
         );

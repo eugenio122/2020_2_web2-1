@@ -1,0 +1,54 @@
+﻿.container-contas {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.card-conta {
+    flex: 1;
+    height: 200px;
+    text-align: center;
+    align-items: center;
+}
+
+.new-card {
+    border-style: dotted;
+    border-width: 2px;
+    cursor: pointer;
+}
+
+.new-card-body {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: gray;
+}
+
+.new-card:hover {
+    border-color: green;
+}
+
+.new-card-body:hover {
+    color: green !important;
+}
+
+.container-tipos-contas {
+    margin: 10px 10px 0 10px;
+}
+
+.tipo-conta {
+    border: 1px solid gray;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+    .tipo-conta:hover {
+        background-color: #f2f2f2;
+    }

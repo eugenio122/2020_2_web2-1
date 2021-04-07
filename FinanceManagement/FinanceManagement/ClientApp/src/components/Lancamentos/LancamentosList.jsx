@@ -16,12 +16,19 @@ export default function LancamentosList() {
 
     const [user, setUser] = useState();
 
-    const [tooltipEdit, setTooltipEdit] = useState('');
-    const [tooltipDelete, setTooltipDelete] = useState('');
+    const [lancamentoEdit, setLancamentoEdit] = useState(null);
 
     useEffect(() => {
         getLancamentos();
     }, [])
+
+    useEffect(() => {
+        if (lancamentoEdit) {
+            setShowFormLancamento(true)
+        } else {
+            setShowFormLancamento(false)
+        }
+    }, [lancamentoEdit])
 
     async function getLancamentos() {
         const token = await authService.getAccessToken();
@@ -71,7 +78,7 @@ export default function LancamentosList() {
                             </tr>
                         </thead>
                         <tbody>
-                            {lancamentos.map(lancamento => (
+                            {lancamentos && lancamentos.length > 0 && lancamentos.map(lancamento => (
                                 <tr key={lancamento.id}>
                                     <td>{lancamento.descricao}</td>
                                     <td className={`${lancamento.despesaReceita ? 'debit' : 'credit'}`}>
@@ -80,24 +87,8 @@ export default function LancamentosList() {
                                     <td>{format(new Date(lancamento.data), 'dd/MM/yyyy', { locale: br })}</td>
                                     <td>{lancamento.conta}</td>
                                     <td>
-                                        {/*<Button outline color='info' id='tooltip-edit'><Icon name='edit' /></Button>{' '}
-                                        <Tooltip
-                                            placement='top'
-                                            isOpen={tooltipEdit === lancamento.id}
-                                            target='tooltip-edit'
-                                            toggle={() => !tooltipEdit ? setTooltipEdit(lancamento.id) : setTooltipEdit('')}
-                                        >
-                                            Editar lançamento
-                                        </Tooltip>*/}
-                                        <Button outline color='danger' id='tooltip-delete' onClick={() => deleteLancamento(lancamento.id)}><Icon name='trash' /></Button>
-                                        <Tooltip
-                                            placement='top'
-                                            isOpen={tooltipDelete == lancamento.id}
-                                            target='tooltip-delete'
-                                            toggle={() => !tooltipDelete ? setTooltipDelete(lancamento.id) : setTooltipDelete('')}
-                                        >
-                                            Excluir lançamento
-                                        </Tooltip>
+                                        <Button outline color='info' onClick={() => setLancamentoEdit(lancamento)}><Icon name='edit' /></Button>{' '}
+                                        <Button outline color='danger'  onClick={() => deleteLancamento(lancamento.id)}><Icon name='trash' /></Button>
                                     </td>
                                 </tr>
                             ))}
@@ -106,7 +97,14 @@ export default function LancamentosList() {
                 </Segment>
             </div>
 
-            <LancamentoForm showFormLancamento={showFormLancamento} setShowFormLancamento={setShowFormLancamento} getLancamentos={getLancamentos} user={user} />
+            <LancamentoForm
+                showFormLancamento={showFormLancamento}
+                setShowFormLancamento={setShowFormLancamento}
+                getLancamentos={getLancamentos}
+                user={user}
+                lancamentoEdit={lancamentoEdit}
+                setLancamentoEdit={setLancamentoEdit}
+            />
         </div >
     )
 }
