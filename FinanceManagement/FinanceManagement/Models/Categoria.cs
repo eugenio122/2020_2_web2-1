@@ -15,6 +15,8 @@ namespace FinanceManagement.Models
         [MaxLength(250)]
         public string DescCategoria { get; set; }
 
-        public ICollection<Lancamento> Lancamentos { get; set; }
+        public ApplicationUser Usuario { get; set; }
+
+        public ICollection<CategoriaLancamento> CategoriaLancamentos { get; set; }
     }
 }

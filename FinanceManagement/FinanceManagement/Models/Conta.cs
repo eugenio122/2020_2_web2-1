@@ -21,6 +21,8 @@ namespace FinanceManagement.Models
 
         public TipoConta TipoConta { get; set; }
 
-        public ICollection<Lancamento> Lancamentos { get; set; }
+        public ApplicationUser Usuario { get; set; }
+
+        public ICollection<ContaLancamento> ContaLancamentos { get; set; }
     }
 }

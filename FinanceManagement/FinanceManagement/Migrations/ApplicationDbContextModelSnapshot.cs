@@ -124,9 +124,36 @@ namespace FinanceManagement.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UsuarioId");
+
                     b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("FinanceManagement.Models.CategoriaLancamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LancamentoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("LancamentoId");
+
+                    b.ToTable("CategoriaLancamentos");
                 });
 
             modelBuilder.Entity("FinanceManagement.Models.Conta", b =>
@@ -149,13 +176,40 @@ namespace FinanceManagement.Migrations
                     b.Property<int?>("TipoContaId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UsuarioId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BancoId");
 
                     b.HasIndex("TipoContaId");
 
+                    b.HasIndex("UsuarioId");
+
                     b.ToTable("Contas");
+                });
+
+            modelBuilder.Entity("FinanceManagement.Models.ContaLancamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ContaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LancamentoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContaId");
+
+                    b.HasIndex("LancamentoId");
+
+                    b.ToTable("ContaLancamentos");
                 });
 
             modelBuilder.Entity("FinanceManagement.Models.Fixo", b =>
@@ -181,12 +235,6 @@ namespace FinanceManagement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContaId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
@@ -203,6 +251,9 @@ namespace FinanceManagement.Migrations
                     b.Property<int?>("ParceladoId")
                         .HasColumnType("int");
 
+                    b.Property<string>("TipoLancamento")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UsuarioId")
                         .HasColumnType("nvarchar(450)");
 
@@ -211,17 +262,9 @@ namespace FinanceManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriaId");
+                    b.HasIndex("FixoId");
 
-                    b.HasIndex("ContaId");
-
-                    b.HasIndex("FixoId")
-                        .IsUnique()
-                        .HasFilter("[FixoId] IS NOT NULL");
-
-                    b.HasIndex("ParceladoId")
-                        .IsUnique()
-                        .HasFilter("[ParceladoId] IS NOT NULL");
+                    b.HasIndex("ParceladoId");
 
                     b.HasIndex("UsuarioId");
 
@@ -527,6 +570,34 @@ namespace FinanceManagement.Migrations
                     b.Navigation("UsuarioDependente");
                 });
 
+            modelBuilder.Entity("FinanceManagement.Models.Categoria", b =>
+                {
+                    b.HasOne("FinanceManagement.Models.ApplicationUser", "Usuario")
+                        .WithMany("Categorias")
+                        .HasForeignKey("UsuarioId");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("FinanceManagement.Models.CategoriaLancamento", b =>
+                {
+                    b.HasOne("FinanceManagement.Models.Categoria", "Categoria")
+                        .WithMany("CategoriaLancamentos")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinanceManagement.Models.Lancamento", "Lancamento")
+                        .WithMany("CategoriaLancamentos")
+                        .HasForeignKey("LancamentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Lancamento");
+                });
+
             modelBuilder.Entity("FinanceManagement.Models.Conta", b =>
                 {
                     b.HasOne("FinanceManagement.Models.Banco", "Banco")
@@ -537,40 +608,49 @@ namespace FinanceManagement.Migrations
                         .WithMany("Contas")
                         .HasForeignKey("TipoContaId");
 
+                    b.HasOne("FinanceManagement.Models.ApplicationUser", "Usuario")
+                        .WithMany("Contas")
+                        .HasForeignKey("UsuarioId");
+
                     b.Navigation("Banco");
 
                     b.Navigation("TipoConta");
+
+                    b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("FinanceManagement.Models.Lancamento", b =>
+            modelBuilder.Entity("FinanceManagement.Models.ContaLancamento", b =>
                 {
-                    b.HasOne("FinanceManagement.Models.Categoria", "Categoria")
-                        .WithMany("Lancamentos")
-                        .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FinanceManagement.Models.Conta", "Conta")
-                        .WithMany("Lancamentos")
+                        .WithMany("ContaLancamentos")
                         .HasForeignKey("ContaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FinanceManagement.Models.Lancamento", "Lancamento")
+                        .WithMany("ContaLancamentos")
+                        .HasForeignKey("LancamentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conta");
+
+                    b.Navigation("Lancamento");
+                });
+
+            modelBuilder.Entity("FinanceManagement.Models.Lancamento", b =>
+                {
                     b.HasOne("FinanceManagement.Models.Fixo", "Fixo")
-                        .WithOne("Lancamentos")
-                        .HasForeignKey("FinanceManagement.Models.Lancamento", "FixoId");
+                        .WithMany("Lancamentos")
+                        .HasForeignKey("FixoId");
 
                     b.HasOne("FinanceManagement.Models.Parcelado", "Parcelado")
-                        .WithOne("Lancamentos")
-                        .HasForeignKey("FinanceManagement.Models.Lancamento", "ParceladoId");
+                        .WithMany("Lancamentos")
+                        .HasForeignKey("ParceladoId");
 
                     b.HasOne("FinanceManagement.Models.ApplicationUser", "Usuario")
                         .WithMany("Lancamentos")
                         .HasForeignKey("UsuarioId");
-
-                    b.Navigation("Categoria");
-
-                    b.Navigation("Conta");
 
                     b.Navigation("Fixo");
 
@@ -643,6 +723,10 @@ namespace FinanceManagement.Migrations
 
             modelBuilder.Entity("FinanceManagement.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Categorias");
+
+                    b.Navigation("Contas");
+
                     b.Navigation("Lancamentos");
 
                     b.Navigation("Usuarios");
@@ -655,17 +739,24 @@ namespace FinanceManagement.Migrations
 
             modelBuilder.Entity("FinanceManagement.Models.Categoria", b =>
                 {
-                    b.Navigation("Lancamentos");
+                    b.Navigation("CategoriaLancamentos");
                 });
 
             modelBuilder.Entity("FinanceManagement.Models.Conta", b =>
                 {
-                    b.Navigation("Lancamentos");
+                    b.Navigation("ContaLancamentos");
                 });
 
             modelBuilder.Entity("FinanceManagement.Models.Fixo", b =>
                 {
                     b.Navigation("Lancamentos");
+                });
+
+            modelBuilder.Entity("FinanceManagement.Models.Lancamento", b =>
+                {
+                    b.Navigation("CategoriaLancamentos");
+
+                    b.Navigation("ContaLancamentos");
                 });
 
             modelBuilder.Entity("FinanceManagement.Models.Parcelado", b =>

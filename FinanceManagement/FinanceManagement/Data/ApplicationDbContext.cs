@@ -20,6 +20,25 @@ namespace FinanceManagement.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           
+            modelBuilder.Entity<CategoriaLancamento>()
+                .HasOne(l => l.Lancamento)
+                .WithMany(cl => cl.CategoriaLancamentos)
+                .HasForeignKey(l => l.LancamentoId);
+            modelBuilder.Entity<CategoriaLancamento>()
+                .HasOne(c => c.Categoria)
+                .WithMany(cl => cl.CategoriaLancamentos)
+                .HasForeignKey(c => c.CategoriaId);
+
+            modelBuilder.Entity<ContaLancamento>()
+                .HasOne(l => l.Lancamento)
+                .WithMany(cl => cl.ContaLancamentos)
+                .HasForeignKey(l => l.LancamentoId);
+            modelBuilder.Entity<ContaLancamento>()
+                .HasOne(c => c.Conta)
+                .WithMany(cl => cl.ContaLancamentos)
+                .HasForeignKey(c => c.ContaId);
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -40,5 +59,9 @@ namespace FinanceManagement.Data
         public DbSet<TipoConta> TipoContas { get; set; }
 
         public DbSet<ApplicationUser> Usuarios { get; set; }
+
+        public DbSet<CategoriaLancamento> CategoriaLancamentos { get; set; }
+
+        public DbSet<ContaLancamento> ContaLancamentos { get; set; }
     }
 }

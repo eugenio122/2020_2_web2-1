@@ -26,5 +26,9 @@ namespace FinanceManagement.Models
         public ICollection<ApplicationUser> Usuarios { get; set; }
 
         public ICollection<Lancamento> Lancamentos { get; set; }
+
+        public ICollection<Categoria> Categorias { get; set; }
+
+        public ICollection<Conta> Contas { get; set; }
     }
 }

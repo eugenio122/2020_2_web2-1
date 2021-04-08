@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinanceManagement.Models
 {
-    public class Fixo
+    public class CategoriaLancamento
     {
         [Key]
         public int Id { get; set; }
 
-        [MaxLength(250)]
-        public string DescFixo { get; set; }
+        public int CategoriaId { get; set; }
+        public Categoria Categoria { get; set; }
 
-        public ICollection<Lancamento>? Lancamentos { get; set; }
+        public int LancamentoId { get; set; }
+        public Lancamento Lancamento { get; set; }
     }
 }

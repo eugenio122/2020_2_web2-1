@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,8 +23,7 @@ namespace FinanceManagement.Models
 
         public ApplicationUser Usuario { get; set; }
 
-        public int CategoriaId { get; set; }
-        public Categoria Categoria { get; set; }
+        public string? TipoLancamento { get; set; }
 
         public int? FixoId { get; set; }
         public Fixo Fixo { get; set; }
@@ -31,7 +31,8 @@ namespace FinanceManagement.Models
         public int? ParceladoId { get; set; }
         public Parcelado Parcelado { get; set; }
 
-        public int ContaId { get; set; }
-        public Conta Conta { get; set; }
+        public ICollection<CategoriaLancamento> CategoriaLancamentos { get; set; }
+
+        public ICollection<ContaLancamento> ContaLancamentos { get; set; }
     }
 }

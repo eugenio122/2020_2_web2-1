@@ -36,22 +36,25 @@ namespace FinanceManagement.Controllers
                 var userId = this.GetUsuarioLogado();
 
                 List<LancamentoViewModel> lancamentoViewModel = new List<LancamentoViewModel>();
-                var lista = (from lan in _context.Lancamentos
-                             join usr in _context.Usuarios on lan.Usuario.Id equals usr.Id
-                             join cat in _context.Categorias on lan.CategoriaId equals cat.Id
-                             join con in _context.Contas on lan.ContaId equals con.Id
+                var lista = (from lanc in _context.Lancamentos
+                             join user in _context.Usuarios on lanc.Usuario.Id equals user.Id
+                             join catl in _context.CategoriaLancamentos on lanc.Id equals catl.LancamentoId
+                             join cate in _context.Categorias on catl.CategoriaId equals cate.Id
+                             join conl in _context.ContaLancamentos on lanc.Id equals conl.LancamentoId
+                             join cont in _context.Contas on conl.ContaId equals cont.Id
 
-                             where (usr.Id == userId)
+                             where (user.Id == userId)
 
                              select new
                              {
-                                 lan.Id,
-                                 lan.Descricao,
-                                 lan.Valor,
-                                 lan.Data,
-                                 lan.DespesaReceita,
-                                 cat.DescCategoria,
-                                 con.DescConta
+                                 lanc.Id,
+                                 lanc.Descricao,
+                                 lanc.Valor,
+                                 lanc.Data,
+                                 lanc.DespesaReceita,
+                                 lanc.TipoLancamento,
+                                 cate.DescCategoria,
+                                 cont.DescConta
                              }
                             ).Distinct().OrderBy(x => x.Data).ToList();
 
@@ -63,6 +66,7 @@ namespace FinanceManagement.Controllers
                     lvm.Valor = item.Valor;
                     lvm.Data = item.Data;
                     lvm.DespesaReceita = item.DespesaReceita;
+                    lvm.TipoLancamento = item.TipoLancamento;
                     lvm.Categoria = item.DescCategoria;
                     lvm.Conta = item.DescConta;
 
@@ -133,7 +137,7 @@ namespace FinanceManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<Lancamento>> PostLancamento(Lancamento lancamento)
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = this.GetUsuarioLogado();
             var usuario = await _context.Usuarios.FindAsync(userId);
 
             lancamento.Usuario = usuario;

@@ -14,6 +14,6 @@ namespace FinanceManagement.Models
         public int PeriodoId { get; set; }
         public Periodo Periodo { get; set; }
 
-        public Lancamento? Lancamentos { get; set; }
+        public ICollection<Lancamento>? Lancamentos { get; set; }
     }
 }
