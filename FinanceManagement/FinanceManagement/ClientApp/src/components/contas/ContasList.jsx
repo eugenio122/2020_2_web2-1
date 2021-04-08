@@ -57,7 +57,10 @@ export default function ContasList(props) {
                                 <CardText>{conta.banco}</CardText>
                             </CardBody>
                             <CardBody>
-                                <Button outline color='info'><Icon name='edit' /> Editar</Button>{' '}
+                                <Button outline color='info' onClick={() => {
+                                    setContaEdit(conta)
+                                    setShowFormConta(true)
+                                }}><Icon name='edit' /> Editar</Button>{' '}
                                 {conta.id != 1 ? <Button outline color='danger' onClick={() => deleteConta(conta.id)}><Icon name='trash' /> Excluir</Button> : null}
                             </CardBody>
                         </Card>
@@ -74,6 +77,7 @@ export default function ContasList(props) {
             </Row>
 
             <ContaForm
+                user={user}
                 contaEdit={contaEdit}
                 setContaEdit={setContaEdit}
                 showFormConta={showFormConta}

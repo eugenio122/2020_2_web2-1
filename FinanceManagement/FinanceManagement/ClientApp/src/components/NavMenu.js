@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, TabContent, TabPane, Nav } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
+import authService from './api-authorization/AuthorizeService';
 import classnames from 'classnames';
 import { Icon } from 'semantic-ui-react'
 import './NavMenu.css';
@@ -15,7 +16,8 @@ export class NavMenu extends Component {
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.state = {
             collapsed: true,
-            activeTab: 'lancamentos'
+            activeTab: 'lancamentos',
+            autenticate: false
         };
     }
 
@@ -25,6 +27,11 @@ export class NavMenu extends Component {
         } else {
             this.setState({ activeTab: 'lancamentos' })
         }
+        this.getAutenticate()
+    }
+
+    async getAutenticate() {
+        this.setState({ autenticate: await authService.isAuthenticated() })
     }
 
     toggleNavbar() {
@@ -42,7 +49,7 @@ export class NavMenu extends Component {
                     <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
                         <Container>
                             <NavbarBrand tag={Link} to="/">Finance Management</NavbarBrand>
-                            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
+                            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" style={{color: 'white'}} />
                             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
                                 <ul className="navbar-nav flex-grow">
                                     <LoginMenu>
@@ -52,13 +59,13 @@ export class NavMenu extends Component {
                         </Container>
                     </Navbar>
                 </header>
-                <div className='container container-tab-menu'>
+                {this.state.autenticate && < div className='container container-tab-menu'>
                     <Nav tabs>
                         <NavItem>
                             <NavLink
                                 tag={Link}
                                 to='/'
-                                style={this.state.activeTab === 'lancamentos' ? {color: 'green'} : {color: 'gray'}}
+                                style={this.state.activeTab === 'lancamentos' ? { color: 'green' } : { color: 'gray' }}
                                 className={classnames({ active: this.state.activeTab === 'lancamentos' })}
                                 onClick={() => this.setState({ activeTab: 'lancamentos' })}
                             >
@@ -79,7 +86,7 @@ export class NavMenu extends Component {
                             </NavLink>
                         </NavItem>
                     </Nav>
-                </div>
+                </div>}
             </>
         );
     }

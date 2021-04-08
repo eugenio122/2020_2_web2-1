@@ -104,3 +104,18 @@ input[type="checkbox"] {
 .modal-title {
     width: 100% !important;
 }
+
+.navbar-light .navbar-toggler{
+    border-color: white;
+    color: white;
+}
+
+.navbar-toggler-icon{
+    color: white;
+}
+
+.container-login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
