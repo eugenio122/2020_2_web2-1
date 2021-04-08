@@ -17,8 +17,10 @@ namespace FinanceManagement.Models
 
         public double Saldo { get; set; }
 
+        public int? BancoId { get; set; }
         public Banco Banco { get; set; }
 
+        public int? TipoContaId { get; set; }
         public TipoConta TipoConta { get; set; }
 
         public ApplicationUser Usuario { get; set; }

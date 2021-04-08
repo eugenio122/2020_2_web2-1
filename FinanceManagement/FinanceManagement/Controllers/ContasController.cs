@@ -54,30 +54,11 @@ namespace FinanceManagement.Controllers
         // PUT: api/Contas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutConta(int id, Conta conta)
+        public async Task<IActionResult> PutConta(int id, [FromBody] Conta conta)
         {
-            if (id != conta.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(conta).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            this.deletar(id);
+            this.salvar(conta);
 
             return NoContent();
         }
@@ -111,6 +92,24 @@ namespace FinanceManagement.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private void salvar(Conta conta)
+        {
+            var userId = this.GetUsuarioLogado();
+            var usuario =  _context.Usuarios.Find(userId);
+            conta.Usuario = usuario;
+
+            _context.Contas.Add(conta);
+            _context.SaveChanges();
+        }
+
+        private void deletar(int id)
+        {
+            Conta conta = _context.Contas.Find(id);
+
+            _context.Contas.Remove(conta);
+            _context.SaveChanges();
         }
 
         private bool ContaExists(int id)

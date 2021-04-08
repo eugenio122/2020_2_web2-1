@@ -103,30 +103,10 @@ namespace FinanceManagement.Controllers
         // PUT: api/Lancamentos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLancamento(int id, Lancamento lancamento)
+        public async Task<IActionResult> PutLancamento(int id, [FromBody] Lancamento lancamento)
         {
-            if (id != lancamento.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(lancamento).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LancamentoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            this.deletar(id);
+            this.salvar(lancamento);
 
             return NoContent();
         }
@@ -145,6 +125,7 @@ namespace FinanceManagement.Controllers
             {
                 lancamento.Valor = lancamento.Valor * -1;
             }
+
             _context.Lancamentos.Add(lancamento);
             await _context.SaveChangesAsync();
 
@@ -163,10 +144,33 @@ namespace FinanceManagement.Controllers
 
             _context.Lancamentos.Remove(lancamento);
             await _context.SaveChangesAsync();
-
+            
             return NoContent();
         }
 
+        private void salvar(Lancamento lancamento)
+        {
+            var userId = this.GetUsuarioLogado();
+            var usuario = _context.Usuarios.Find(userId);
+
+            lancamento.Usuario = usuario;
+            if (lancamento.DespesaReceita == true)
+            {
+                lancamento.Valor = lancamento.Valor * -1;
+            }
+
+            _context.Lancamentos.Add(lancamento);
+            _context.SaveChanges();
+        }
+
+
+        private void deletar(int id)
+        {
+            var lancamento = _context.Lancamentos.Find(id);
+
+            _context.Lancamentos.Remove(lancamento);
+            _context.SaveChangesAsync();
+        }
         private bool LancamentoExists(int id)
         {
             return _context.Lancamentos.Any(e => e.Id == id);

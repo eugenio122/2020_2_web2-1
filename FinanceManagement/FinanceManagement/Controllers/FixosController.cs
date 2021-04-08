@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
+using System.Security.Claims;
 
 namespace FinanceManagement.Controllers
 {
@@ -19,6 +20,11 @@ namespace FinanceManagement.Controllers
         public FixosController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        private string GetUsuarioLogado()
+        {
+            return this.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         // GET: api/Fixos
