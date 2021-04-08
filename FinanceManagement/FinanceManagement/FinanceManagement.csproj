@@ -37,6 +37,9 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     <Compile Remove="Controllers\AdministrationController.cs" />
     <None Remove="ScaffoldingReadMe.txt" />
+    <Compile Remove="Migrations\20210408000325_InitialCreate.cs" />
+    <Compile Remove="Migrations\ApplicationDbContextModelSnapshot.cs" />
+    <Compile Remove="Migrations\20210408000325_InitialCreate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

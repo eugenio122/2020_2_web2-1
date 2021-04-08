@@ -27,7 +27,6 @@ export default function ContasList(props) {
         });
 
         const data = await response.json();
-        console.log(data);
 
         setContas(data);
         setUser(user)
@@ -49,22 +48,21 @@ export default function ContasList(props) {
         <div className='container-contas'>
             <Row style={{ width: '100%' }}>
                 {contas && contas.length > 0 && contas.map(conta => (
-                    <>
-                        <Col sm="6" style={{ marginBottom: 20 }} key={conta.id}>
-                            <Card className='card-conta'>
-                                <CardBody>
-                                    <CardTitle tag="h5">{conta.descConta}({conta.tipoConta})</CardTitle>
-                                    <CardSubtitle tag="h6" className={`${conta.saldo > 0 ? 'credit' : conta.saldo < 0 ? 'debit' : 'text-muted'}`}>{moneyLabel(conta.saldo)}</CardSubtitle>
-                                    <br />
-                                    <CardText>{conta.banco}</CardText>
-                                </CardBody>
-                                <CardBody>
-                                    <Button outline color='info'><Icon name='edit' /> Editar</Button>{' '}
-                                    {conta.id != 1 ? <Button outline color='danger' onClick={() => deleteConta(conta.id)}><Icon name='trash' /> Excluir</Button> : null}
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </>
+                    <Col sm="6" style={{ marginBottom: 20 }} key={conta.id}>
+                        <Card className='card-conta'>
+                            <CardBody>
+                                <CardTitle tag="h5">{conta.descConta}({conta.tipoConta})</CardTitle>
+                                <CardSubtitle tag="h6" className={`${conta.saldo > 0 ? 'credit' : conta.saldo < 0 ? 'debit' : 'text-muted'}`}>{moneyLabel(conta.saldo)}</CardSubtitle>
+                                <br />
+                                <CardText>{conta.banco}</CardText>
+                            </CardBody>
+                            <CardBody>
+                                <Button outline color='info'><Icon name='edit' /> Editar</Button>{' '}
+                                {conta.id != 1 ? <Button outline color='danger' onClick={() => deleteConta(conta.id)}><Icon name='trash' /> Excluir</Button> : null}
+                            </CardBody>
+                        </Card>
+                    </Col>
+
                 ))}
                 <Col sm="6" style={{ marginBottom: 20 }}>
                     <Card className='card-conta new-card' onClick={() => setShowFormConta(true)}>

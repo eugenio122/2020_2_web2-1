@@ -93,10 +93,14 @@ input[type="checkbox"] {
     color: green;
 }
 
-.container-tab-menu{
+.container-tab-menu {
     margin-bottom: 40px
 }
 
 .cursor-pointer {
     cursor: pointer
+}
+
+.modal-title {
+    width: 100% !important;
 }
