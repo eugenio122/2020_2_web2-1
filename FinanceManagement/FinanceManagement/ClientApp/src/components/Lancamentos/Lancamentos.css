@@ -2,13 +2,13 @@
     margin-top: 40px;
 }
 
-.container-type-lancamento{
-    display:flex;
+.container-type-lancamento {
+    display: flex;
 }
 
-.type-lancamento{
+.type-lancamento {
     border: 1px solid #ced4da;
-    flex:1;
+    flex: 1;
     border-radius: 5px;
     display: flex;
     justify-content: center;
@@ -17,17 +17,17 @@
     cursor: pointer;
 }
 
-.despesa{
+.despesa {
     margin-right: 5px;
     color: red;
 }
 
-.receita{
+.receita {
     margin-left: 5px;
     color: green;
 }
 
-.type-lancamento:hover{
+.type-lancamento:hover {
     background-color: #f2f2f2;
 }
 
@@ -54,4 +54,32 @@
     margin-top: 0.25rem;
     font-size: 80%;
     color: #dc3545;
+}
+
+.container-detalhe-lancamento {
+}
+
+.info-lancamento {
+    display: flex;
+}
+
+.info-lancamento strong{
+    margin-right: 10px;
+}
+
+.info-fixo span{
+    margin-right: 5px;
+}
+
+.info-parcelado {
+    display: flex;
+    justify-content: space-between;
+}
+
+.desc-parcelado span {
+    margin-right: 5px;
+}
+
+.desc-total strong {
+    margin-right: 5px;
 }

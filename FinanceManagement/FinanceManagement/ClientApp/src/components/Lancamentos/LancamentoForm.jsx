@@ -42,22 +42,39 @@ export default function LancamentoForm(props) {
 
     function getLancamentoEdit() {
         const lancamento = props.lancamentoEdit
-        console.log(contasOptions)
         if (lancamento) {
             setFormData({
                 tipo: lancamento.despesaReceita ? 'despesa' : 'receita',
                 descricao: lancamento.descricao,
-                valor: `${lancamento.despesaReceita ? `-R$${moneyInputFormat(lancamento.valor.toFixed(2))}` : `R$${moneyInputFormat(lancamento.valor.toFixed(2))}`}`,
+                valor: `${lancamento.despesaReceita ?
+                    `-R$${moneyInputFormat(lancamento.tipoLancamento === 'parcelado' ?
+                        (lancamento.valor * lancamento.quantidade).toFixed(2) : lancamento.valor.toFixed(2))}`
+                    : `R$${moneyInputFormat(lancamento.tipoLancamento === 'parcelado' ?
+                        (lancamento.valor * lancamento.quantidade).toFixed(2) : lancamento.valor.toFixed(2))}`}`,
                 data: format(new Date(lancamento.data), 'yyyy-MM-dd'),
                 categoria: categoriasOptions.find(cat => cat.text === lancamento.categoria) ?
                     categoriasOptions.find(cat => cat.text === lancamento.categoria).id : '',
                 conta: contasOptions.find(conta => conta.text === lancamento.conta) ?
                     contasOptions.find(conta => conta.text === lancamento.conta).id : ''
             })
+            if (lancamento.tipoLancamento === 'fixo') {
+                setIsRepetir(true)
+                setIsFixo(true)
+                setPeriodoFixo(fixosOptions.find(fixo => fixo.text === lancamento.fixo) ?
+                    fixosOptions.find(fixo => fixo.text === lancamento.fixo).id : 4)
+            }
+
+            if (lancamento.tipoLancamento === 'parcelado') {
+                setIsRepetir(true)
+                setIsParcelado(true)
+                setPeriodoParcelado({
+                    qtd: lancamento.quantidade,
+                    periodo: periodosOptions.find(periodo => periodo.text === lancamento.parcelado) ?
+                        periodosOptions.find(periodo => periodo.text === lancamento.parcelado).id : 2
+                })
+            }
         }
     }
-
-    console.log(formData)
 
     async function getCategorias(newCat) {
         const token = await authService.getAccessToken();
@@ -92,7 +109,7 @@ export default function LancamentoForm(props) {
         const response = await fetch('api/categorias', {
             headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
             method: "POST",
-            body: JSON.stringify({ descCategoria: data.value })
+            body: JSON.stringify({ descCategoria: data.value, usuarioId: props.user.sub })
         });
 
         getCategorias(data.value)
@@ -125,6 +142,11 @@ export default function LancamentoForm(props) {
     function resetForm() {
         setFormData({ tipo: 'despesa', descricao: '', valor: '', data: '', conta: '', categoria: '', repetir: '' });
         setErrorsDataForm({ descricao: false, valor: false, data: false, conta: false, categoria: false, repetir: '' });
+        setIsRepetir(false)
+        setIsFixo(false)
+        setIsParcelado(false)
+        setPeriodoFixo(4)
+        setPeriodoParcelado({ qtd: '2', periodo: 2 })
     }
 
     async function addParcela(e) {
@@ -170,12 +192,11 @@ export default function LancamentoForm(props) {
         const payload = {
             despesaReceita: formData.tipo === 'despesa' ? true : false,
             descricao: formData.descricao,
-            valor: moneyInputFormatToFloat(formData.valor),
+            valor: parceladoId ? moneyInputFormatToFloat(formData.valor) / Number(periodoParcelado.qtd) : moneyInputFormatToFloat(formData.valor),
             data: formData.data,
-            contaId: formData.conta,
-            categoriaId: formData.categoria,
             fixoId: isFixo ? periodoFixo : null,
             parceladoId: parceladoId ? parceladoId : null,
+            tipoLancamento: isFixo ? 'fixo' : parceladoId ? 'parcelado' : 'sem repetição',
             usuarioId: props.user.sub
         }
 
@@ -201,12 +222,44 @@ export default function LancamentoForm(props) {
             });
 
             if (response.status === 201) {
-                props.getLancamentos()
-                resetForm()
-                props.setShowFormLancamento(false)
+                const data = await response.json();
+
+                lancarContaCategoria(data.id)
             }
         }
 
+    }
+
+
+    async function lancarContaCategoria(lancamentoId) {
+        const token = await authService.getAccessToken();
+
+        const payloadConta = {
+            contaId: formData.conta,
+            lancamentoId: lancamentoId
+        }
+        const responseConta = await fetch('api/contaLancamentos', {
+            headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            method: "POST",
+            body: JSON.stringify(payloadConta)
+        });
+
+        const payloadCategoria = {
+            categoriaId: formData.categoria,
+            lancamentoId: lancamentoId
+        }
+
+        const responseCategoria = await fetch('api/categoriaLancamentos', {
+            headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            method: "POST",
+            body: JSON.stringify(payloadCategoria)
+        });
+
+        if (responseConta.status === 201 && responseCategoria.status === 201) {
+            props.getLancamentos()
+            resetForm()
+            props.setShowFormLancamento(false)
+        }
     }
 
     return (
