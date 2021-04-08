@@ -24,7 +24,7 @@ Apesar de toda tecnologia existente hoje, uma das coisas que mais acontecem na s
 - Possuir, pelo menos um, relacionamento 1:N (um para muitos)
 - Possuir, pelo menos um, relacionamento M:N (muito para muitos)
 - Fazer um programa, em C# com Entity Framework, para realizar carga inicial dos dados
-- Front-End: Ainda não foi definido
+- Front-End: ReactJs
 
 ## Membros da equipe (Até 3 pessoas. Identificar o líder)
 
