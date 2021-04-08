@@ -37,9 +37,6 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     <Compile Remove="Controllers\AdministrationController.cs" />
     <None Remove="ScaffoldingReadMe.txt" />
-    <Compile Remove="Migrations\20210408000325_InitialCreate.cs" />
-    <Compile Remove="Migrations\ApplicationDbContextModelSnapshot.cs" />
-    <Compile Remove="Migrations\20210408000325_InitialCreate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,7 +62,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

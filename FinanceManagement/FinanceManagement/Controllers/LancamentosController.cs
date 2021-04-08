@@ -141,10 +141,12 @@ namespace FinanceManagement.Controllers
             var usuario = await _context.Usuarios.FindAsync(userId);
 
             lancamento.Usuario = usuario;
-
+            if (lancamento.DespesaReceita == true)
+            {
+                lancamento.Valor = lancamento.Valor * -1;
+            }
             _context.Lancamentos.Add(lancamento);
             await _context.SaveChangesAsync();
-
 
             return CreatedAtAction("GetLancamento", new { id = lancamento.Id }, lancamento);
         }

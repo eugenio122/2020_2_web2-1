@@ -32,7 +32,7 @@ namespace FinanceManagement
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("AlanPC")));
+                    Configuration.GetConnectionString("EugenioPC")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 

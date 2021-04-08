@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
+using System.Security.Claims;
 
 namespace FinanceManagement.Controllers
 {
@@ -21,11 +22,18 @@ namespace FinanceManagement.Controllers
             _context = context;
         }
 
+        private string GetUsuarioLogado()
+        {
+            return this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
         // GET: api/Categorias
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias()
         {
-            return await _context.Categorias.ToListAsync();
+            var userId = this.GetUsuarioLogado();
+
+            return await _context.Categorias.Where(x => x.Usuario.Id == userId || x.Usuario.Id == null).ToListAsync();
         }
 
         // GET: api/Categorias/5
@@ -78,6 +86,9 @@ namespace FinanceManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
+            var userId = this.GetUsuarioLogado();
+            var usuario = await _context.Usuarios.FindAsync(userId);
+            categoria.Usuario = usuario;
             _context.Categorias.Add(categoria);
             await _context.SaveChangesAsync();
 

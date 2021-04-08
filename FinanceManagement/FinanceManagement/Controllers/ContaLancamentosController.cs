@@ -81,6 +81,26 @@ namespace FinanceManagement.Controllers
             _context.ContaLancamentos.Add(contaLancamento);
             await _context.SaveChangesAsync();
 
+            var lancamento = await _context.Lancamentos.FindAsync(contaLancamento.LancamentoId);
+            if ((contaLancamento.LancamentoId == lancamento.Id))
+            {
+                var conta = await _context.Contas.FindAsync(contaLancamento.ContaId);
+                if (conta.Id == contaLancamento.ContaId)
+                {
+                    if (lancamento.DespesaReceita == true)
+                    {
+                        var value = (-1) * lancamento.Valor;
+                        conta.Saldo -= value;
+                    }
+                    else
+                    {
+                        conta.Saldo += lancamento.Valor;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
             return CreatedAtAction("GetContaLancamento", new { id = contaLancamento.Id }, contaLancamento);
         }
 

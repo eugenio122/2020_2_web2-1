@@ -82,7 +82,7 @@ namespace FinanceManagement.Data
             var corrente = new TipoConta { Tipo = "Conta Corrente" };
             var poupanca = new TipoConta { Tipo = "Conta Poupança" };
             var investimento = new TipoConta { Tipo = "Investimentos" };
-            outros = new TipoConta { Tipo = "Outros" };
+            var outros = new TipoConta { Tipo = "Outros" };
             this.context.TipoContas.AddRange(corrente, poupanca, investimento, outros);
         }
 
@@ -114,8 +114,7 @@ namespace FinanceManagement.Data
 
         private void AddContas()
         {
-            var data = new Conta { DescConta = "Carteira Virtual", Saldo = 0.0, TipoConta = outros };
-            this.context.Contas.AddRange(data);
+            
         }
 
     }

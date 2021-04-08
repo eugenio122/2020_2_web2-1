@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
+using System.Security.Claims;
 
 namespace FinanceManagement.Controllers
 {
@@ -21,18 +22,26 @@ namespace FinanceManagement.Controllers
             _context = context;
         }
 
+        private string GetUsuarioLogado()
+        {
+            return this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
         // GET: api/Contas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Conta>>> GetContas()
         {
-            return await _context.Contas.ToListAsync();
+            var userId = this.GetUsuarioLogado();
+            
+            return await _context.Contas.Where(x => x.Usuario.Id == userId).ToListAsync();
         }
 
         // GET: api/Contas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Conta>> GetConta(int id)
         {
-            var conta = await _context.Contas.FindAsync(id);
+            var userId = this.GetUsuarioLogado();
+            var conta = await _context.Contas.Where(x => x.Usuario.Id == userId && x.Id == id).FirstOrDefaultAsync();
 
             if (conta == null)
             {
@@ -78,6 +87,10 @@ namespace FinanceManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<Conta>> PostConta(Conta conta)
         {
+            var userId = this.GetUsuarioLogado();
+            var usuario = await _context.Usuarios.FindAsync(userId);
+            conta.Usuario = usuario;
+            
             _context.Contas.Add(conta);
             await _context.SaveChangesAsync();
 
