@@ -18,7 +18,7 @@ export default function LancamentosList() {
 
     const [lancamentoEdit, setLancamentoEdit] = useState(null);
 
-    const [detalheLancamento, setDetalheLancamento] = useState(null)
+    const [detalheLancamento, setDetalheLancamento] = useState(null);
     const [valorTotal, setValorTotal] = useState(0)
 
     useEffect(() => {
@@ -41,15 +41,18 @@ export default function LancamentosList() {
         });
 
         const data = await response.json();
-        const newData = data.map(lanc => lanc.despesaReceita ? { ...lanc, valor: lanc.valor * -1 } : { ...lanc })
 
-        const totalValue = newData.reduce((sumTotal, lanc) => {
-            return sumTotal + lanc.valor
-        }, 0)
+        if (response.status === 200) {
+            const newData = data.map(lanc => lanc.despesaReceita ? { ...lanc, valor: lanc.valor * -1 } : { ...lanc })
 
-        setValorTotal(totalValue)
-        setLancamentos(newData);
-        setLoading(data);
+            const totalValue = newData.reduce((sumTotal, lanc) => {
+                return sumTotal + lanc.valor
+            }, 0)
+
+            setValorTotal(totalValue)
+            setLancamentos(newData);
+        }
+
         setUser(user)
     }
 
@@ -188,12 +191,12 @@ export default function LancamentosList() {
                                             {`${moneyLabel(detalheLancamento.valor * detalheLancamento.quantidade)}`} <Icon name={detalheLancamento.despesaReceita ? 'arrow down' : 'arrow up'} />
                                         </span>
                                     </div>
-                                </div>
+                                </div> 
                             </>
                         }
                         <hr />
                         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                            <Button outline color='info' onClick={() => setLancamentoEdit(detalheLancamento)}><Icon name='edit' /> Editar</Button>
+                            {/*<Button outline color='info' onClick={() => setLancamentoEdit(detalheLancamento)}><Icon name='edit' /> Editar</Button> {" "}*/}
                             <Button outline color='danger' onClick={() => deleteLancamento(detalheLancamento.id)}><Icon name='trash' /> Excluir</Button>
                         </div>
                     </div>

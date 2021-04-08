@@ -31,9 +31,8 @@ export default function ContaForm(props) {
     function getContaEdit() {
         const conta = props.contaEdit
         if (conta) {
-            setType('form')
-            setTipoConta(conta.tipoConta)
-            setBanco(conta.banco)
+            setTipoConta(conta.tipoContaId)
+            setBanco(conta.bancoId)
             setFormData({ descricao: conta.descConta, saldo: `${conta.saldo >= 0 ? `R$${moneyInputFormat(conta.saldo.toFixed(2))}` : `-R$${moneyInputFormat(conta.saldo.toFixed(2))}`}` })
         }
     }
@@ -66,7 +65,7 @@ export default function ContaForm(props) {
         return (
             <div className='container-tipos-contas'>
                 {tiposContas && tiposContas.length > 0 && tiposContas.map(tipo => (
-                    <div className='tipo-conta' key={tipo.id} onClick={() => {
+                    <div className={`tipo-conta ${tipoConta == tipo.id ? 'tipo-active' : ''}`} key={tipo.id} onClick={() => {
                         if (tipo.tipo === 'Outros') {
                             setTipoConta(tipo.id)
                             setType('form')
@@ -87,12 +86,12 @@ export default function ContaForm(props) {
             <div>
                 <span style={{ marginLeft: 10 }}>Selecione o banco</span>
                 <div className='container-tipos-contas'>
-                    {bancos && bancos.length > 0 && bancos.map(banco => (
-                        <div className='tipo-conta' key={banco.id} onClick={() => {
-                            setBanco(banco.id)
+                    {bancos && bancos.length > 0 && bancos.map(bank => (
+                        <div className={`tipo-conta ${banco && banco == bank.id ? 'tipo-active' : ''}`} key={bank.id} onClick={() => {
+                            setBanco(bank.id)
                             setType('form')
                         }}>
-                            <span>{banco.nome}</span>
+                            <span>{bank.nome}</span>
                         </div>
                     ))}
                 </div>
@@ -136,7 +135,7 @@ export default function ContaForm(props) {
                 body: JSON.stringify(payload)
             });
 
-            if (response.status === 201) {
+            if (response.status === 204) {
                 props.getContas()
                 resetForm()
                 props.setShowFormConta(false)
@@ -213,6 +212,8 @@ export default function ContaForm(props) {
         setType('tipoConta')
         setTipoConta(null)
         setBanco(null)
+        props.setContaEdit(null)
+        setFormData({ descricao: '', saldo: 'R$0,00'})
     }
 
     return (

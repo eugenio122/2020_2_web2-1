@@ -208,7 +208,7 @@ export default function LancamentoForm(props) {
                 body: JSON.stringify(payload)
             });
 
-            if (response.status === 201) {
+            if (response.status === 204) {
                 props.getLancamentos()
                 resetForm()
                 props.setShowFormLancamento(false)
