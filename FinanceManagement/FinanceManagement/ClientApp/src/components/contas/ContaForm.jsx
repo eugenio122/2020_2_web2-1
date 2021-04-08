@@ -7,13 +7,13 @@ import { Icon } from 'semantic-ui-react'
 import { moneyInputFormat, moneyInputFormatToFloat } from '../../helpers/FnUtils'
 
 export default function ContaForm(props) {
-    const [type, setType] = useState('tipoConta')
+    const [type, setType] = useState('tipoConta');
 
-    const [tiposContas, setTiposContas] = useState([])
-    const [bancos, setBancos] = useState([])
+    const [tiposContas, setTiposContas] = useState([]);
+    const [bancos, setBancos] = useState([]);
 
-    const [tipoConta, setTipoConta] = useState(null)
-    const [banco, setBanco] = useState(null)
+    const [tipoConta, setTipoConta] = useState(null);
+    const [banco, setBanco] = useState(null);
     const [formData, setFormData] = useState({ descricao: '', saldo: 'R$0,00' });
     const [errorsDataForm, setErrorsDataForm] = useState({ descricao: false, saldo: false });
 
@@ -21,6 +21,22 @@ export default function ContaForm(props) {
         getTiposContas()
         getBancos()
     }, [])
+
+    useEffect(() => {
+        if (props.contaEdit) {
+            getContaEdit()
+        }
+    }, [props.contaEdit])
+
+    function getContaEdit() {
+        const conta = props.contaEdit
+        if (conta) {
+            setType('form')
+            setTipoConta(conta.tipoConta)
+            setBanco(conta.banco)
+            setFormData({ descricao: conta.descConta, saldo: `${conta.saldo >= 0 ? `R$${moneyInputFormat(conta.saldo.toFixed(2))}` : `-R$${moneyInputFormat(conta.saldo.toFixed(2))}`}` })
+        }
+    }
 
     async function getTiposContas() {
         const token = await authService.getAccessToken();
@@ -108,22 +124,37 @@ export default function ContaForm(props) {
             data: formData.data,
             bancoId: banco,
             tipoContaId: tipoConta,
+            usuarioId: props.user.sub
         }
 
 
-        const token = await authService.getAccessToken();
-        const response = await fetch('api/contas', {
-            headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
+        if (props.contaEdit) {
+            const token = await authService.getAccessToken();
+            const response = await fetch(`api/contas/${props.contaEdit.id}`, {
+                headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                method: "PUT",
+                body: JSON.stringify(payload)
+            });
 
-        if (response.status === 201) {
-            props.getContas()
-            resetForm()
-            props.setShowFormConta(false)
+            if (response.status === 201) {
+                props.getContas()
+                resetForm()
+                props.setShowFormConta(false)
+            }
+        } else {
+            const token = await authService.getAccessToken();
+            const response = await fetch('api/contas', {
+                headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            if (response.status === 201) {
+                props.getContas()
+                resetForm()
+                props.setShowFormConta(false)
+            }
         }
-
     }
 
     function renderForm() {
@@ -193,7 +224,7 @@ export default function ContaForm(props) {
                 <ModalHeader toggle={() => {
                     props.setShowFormConta(false)
                     resetForm()
-                }}>Nova Conta</ModalHeader>
+                }}>{`${props.contaEdit ? 'Editar conta' : 'Nova conta'}`}</ModalHeader>
                 <ModalBody>
                     {type === 'tipoConta' && renderFormTipoConta()}
                     {type === 'banco' && renderFormBanco()}
