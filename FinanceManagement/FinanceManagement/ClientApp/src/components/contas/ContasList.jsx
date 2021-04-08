@@ -51,7 +51,7 @@ export default function ContasList(props) {
                     <Col sm="6" style={{ marginBottom: 20 }} key={conta.id}>
                         <Card className='card-conta'>
                             <CardBody>
-                                <CardTitle tag="h5">{conta.descConta}({conta.tipoConta})</CardTitle>
+                                <CardTitle tag="h5">{conta.descConta}</CardTitle>
                                 <CardSubtitle tag="h6" className={`${conta.saldo > 0 ? 'credit' : conta.saldo < 0 ? 'debit' : 'text-muted'}`}>{moneyLabel(conta.saldo)}</CardSubtitle>
                                 <br />
                                 <CardText>{conta.banco}</CardText>
@@ -60,8 +60,8 @@ export default function ContasList(props) {
                                 <Button outline color='info' onClick={() => {
                                     setContaEdit(conta)
                                     setShowFormConta(true)
-                                }}><Icon name='edit' /> Editar</Button>{' '}
-                                {conta.id != 1 ? <Button outline color='danger' onClick={() => deleteConta(conta.id)}><Icon name='trash' /> Excluir</Button> : null}
+                                }}><Icon name='edit' /> Editar</Button>{" "}
+                                {conta.descConta != 'Carteira Virtual' ? <Button outline color='danger' onClick={() => deleteConta(conta.id)}><Icon name='trash' /> Excluir</Button> : null}
                             </CardBody>
                         </Card>
                     </Col>

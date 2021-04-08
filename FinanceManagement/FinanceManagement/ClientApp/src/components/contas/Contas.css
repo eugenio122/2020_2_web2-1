@@ -52,3 +52,15 @@
     .tipo-conta:hover {
         background-color: #f2f2f2;
     }
+
+.tipo-active {
+    background-color: rgb(51 204 51 / 10%);
+    border-color: green;
+    color: green;
+}
+
+    .tipo-active:hover {
+        background-color: rgb(51 204 51 / 10%);
+        border-color: green;
+        color: green;
+    }
