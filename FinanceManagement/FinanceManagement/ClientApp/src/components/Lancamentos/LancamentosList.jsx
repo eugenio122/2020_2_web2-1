@@ -5,7 +5,7 @@ import authService from '../api-authorization/AuthorizeService';
 import { Button, Table, Card, Tooltip, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { Segment, Icon } from 'semantic-ui-react';
 import LancamentoForm from './LancamentoForm';
-import { format } from 'date-fns';
+import { format, getMonth, addMonths } from 'date-fns';
 import { moneyLabel } from '../../helpers/FnUtils';
 import br from 'date-fns/locale/pt-BR';
 
@@ -23,6 +23,7 @@ export default function LancamentosList() {
 
     useEffect(() => {
         getLancamentos();
+        getContas();
     }, [])
 
     useEffect(() => {
@@ -43,19 +44,31 @@ export default function LancamentosList() {
         const data = await response.json();
 
         if (response.status === 200) {
-            const newData = data.map(lanc => lanc.despesaReceita ? { ...lanc, valor: lanc.valor * -1 } : { ...lanc })
-
-            const totalValue = newData.reduce((sumTotal, lanc) => {
-                return sumTotal + lanc.valor
-            }, 0)
-
-            setValorTotal(totalValue)
-            setLancamentos(newData);
+            setLancamentos(data);
         }
 
         setUser(user)
     }
 
+    async function getContas() {
+        const token = await authService.getAccessToken();
+        const user = await authService.getUser()
+        const response = await fetch('api/contas', {
+            headers: !token ? {} : { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+            const totalValue = data.reduce((sumTotal, conta) => {
+                return sumTotal + conta.saldo
+            }, 0)
+
+            setValorTotal(totalValue.toFixed(2));
+
+            console.log(totalValue)
+        }
+    }
 
     async function getLancamentoDetalhe(lancamento) {
         const newLancamento = { ...lancamento }
@@ -91,13 +104,45 @@ export default function LancamentosList() {
         });
 
         getLancamentos()
+        setDetalheLancamento(null)
+    }
+
+    function renderParcelas(lancamento) {
+        const mesAtual = getMonth(new Date()) + 1;
+
+        const meses = []
+
+        for (let index = 1; index <= detalheLancamento.quantidade; index++) {
+            const mes = addMonths(new Date(lancamento.data), index) + 1
+            meses.push(getMonth(new Date(mes)))
+        }
+
+        console.log(meses)
+        console.log(mesAtual)
+
+        if (meses.findIndex(index => index === mesAtual) === -1) {
+            return <span>Finalizado <Icon name='check' /></span>
+        } else {
+            return <span>Parcela {meses.findIndex(index => index === mesAtual) + 1} / {detalheLancamento.quantidade}</span>
+        }
     }
 
     return (
         <div>
             <div className='container-header-lancamento'>
-                <Segment textAlign='right' style={{ padding: 10 }}>
-                    <Button color="success" onClick={() => setShowFormLancamento(true)}> Novo lançamento</Button>
+                <Segment style={{ padding: 10 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }}>
+                        <div style={{ display: 'flex', fontSize: '18px' }}>
+                            <strong style={{ marginRight: 10 }}>
+                                Saldo total:
+                            </strong>
+                            <span className={`${valorTotal < 0 ? 'debit' : valorTotal > 0 ? 'credit' : ''}`}>
+                                {`${moneyLabel(valorTotal)}`}
+                            </span>
+                        </div>
+                        <Button color="success" onClick={() => setShowFormLancamento(true)}> Novo lançamento</Button>
+                    </div>
+
                 </Segment>
             </div>
 
@@ -113,7 +158,7 @@ export default function LancamentosList() {
                             </tr>
                         </thead>
                         <tbody>
-                            {lancamentos && lancamentos.length > 0 && lancamentos.map(lancamento => (
+                            {lancamentos && lancamentos.length > 0 && lancamentos.filter(lanc => lanc.status !== 'finalizado').map(lancamento => (
                                 <tr key={lancamento.id} onClick={() => getLancamentoDetalhe(lancamento)}>
                                     <td>{lancamento.descricao}</td>
                                     <td className={`${lancamento.despesaReceita ? 'debit' : 'credit'}`}>
@@ -125,15 +170,6 @@ export default function LancamentosList() {
                             ))}
                         </tbody>
                     </Table>
-                    <hr />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 18 }}>
-                        <strong>
-                            Total
-                        </strong>
-                        <span className={`${valorTotal < 0 ? 'debit' : valorTotal > 0 ? 'credit' : ''}`}>
-                            {`${moneyLabel(valorTotal)}`}
-                        </span>
-                    </div>
                 </Segment>
             </div>
 
@@ -180,10 +216,15 @@ export default function LancamentosList() {
                                 <hr />
                                 <div className='info-parcelado'>
                                     <div className='desc-parcelado'>
-                                        <span>Repetir</span>
-                                        <span>{detalheLancamento.quantidade}</span>
-                                        <span>{detalheLancamento.parcelado}</span>
-                                        <span><Icon name='repeat' /></span>
+                                        <div>
+                                            <span>Repetir</span>
+                                            <span>{detalheLancamento.quantidade}</span>
+                                            <span>{detalheLancamento.parcelado}</span>
+                                            <span><Icon name='repeat' /></span>
+                                        </div>
+                                        <div>
+                                            {renderParcelas(detalheLancamento)}
+                                        </div>
                                     </div>
                                     <div className='desc-total'>
                                         <strong>Total</strong>
@@ -191,7 +232,7 @@ export default function LancamentosList() {
                                             {`${moneyLabel(detalheLancamento.valor * detalheLancamento.quantidade)}`} <Icon name={detalheLancamento.despesaReceita ? 'arrow down' : 'arrow up'} />
                                         </span>
                                     </div>
-                                </div> 
+                                </div>
                             </>
                         }
                         <hr />
@@ -208,6 +249,7 @@ export default function LancamentosList() {
                 showFormLancamento={showFormLancamento}
                 setShowFormLancamento={setShowFormLancamento}
                 getLancamentos={getLancamentos}
+                getContas={getContas}
                 user={user}
                 lancamentoEdit={lancamentoEdit}
                 setLancamentoEdit={setLancamentoEdit}
