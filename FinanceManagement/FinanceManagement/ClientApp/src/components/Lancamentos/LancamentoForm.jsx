@@ -192,7 +192,7 @@ export default function LancamentoForm(props) {
         const payload = {
             despesaReceita: formData.tipo === 'despesa' ? true : false,
             descricao: formData.descricao,
-            valor: parceladoId ? moneyInputFormatToFloat(formData.valor) / Number(periodoParcelado.qtd) : moneyInputFormatToFloat(formData.valor),
+            valor: parceladoId ? moneyInputFormatToFloat(formData.valor) / Number(periodoParcelado.qtd).toFixed(2) : moneyInputFormatToFloat(formData.valor).toFixed(2),
             data: formData.data,
             fixoId: isFixo ? periodoFixo : null,
             parceladoId: parceladoId ? parceladoId : null,
@@ -256,6 +256,7 @@ export default function LancamentoForm(props) {
         });
 
         if (responseConta.status === 201 && responseCategoria.status === 201) {
+            props.getContas()
             props.getLancamentos()
             resetForm()
             props.setShowFormLancamento(false)
