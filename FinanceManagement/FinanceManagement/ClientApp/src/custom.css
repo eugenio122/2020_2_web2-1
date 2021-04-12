@@ -105,21 +105,21 @@ input[type="checkbox"] {
     width: 100% !important;
 }
 
-.navbar-light .navbar-toggler{
+.navbar-light .navbar-toggler {
     border-color: white;
     color: white;
 }
 
-.navbar-toggler-icon{
+.navbar-toggler-icon {
     color: white;
 }
 
-.container-login{
+.container-login {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-tr{
+tr {
     cursor: pointer !important;
 }

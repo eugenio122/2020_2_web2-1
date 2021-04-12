@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FinanceManagement.Data;
 using FinanceManagement.Models;
+using System.Security.Claims;
 
 namespace FinanceManagement.Controllers
 {
@@ -19,6 +20,11 @@ namespace FinanceManagement.Controllers
         public ContaLancamentosController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        private string GetUsuarioLogado()
+        {
+            return this.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         // GET: api/ContaLancamentos
@@ -81,22 +87,38 @@ namespace FinanceManagement.Controllers
             _context.ContaLancamentos.Add(contaLancamento);
             await _context.SaveChangesAsync();
 
+            var conta = await _context.Contas.FindAsync(contaLancamento.ContaId);
             var lancamento = await _context.Lancamentos.FindAsync(contaLancamento.LancamentoId);
-            if ((contaLancamento.LancamentoId == lancamento.Id))
+            if ((contaLancamento.LancamentoId == lancamento.Id) && (conta.Id == contaLancamento.ContaId))
             {
-                var conta = await _context.Contas.FindAsync(contaLancamento.ContaId);
-                if (conta.Id == contaLancamento.ContaId)
+
+                var parcelado = await _context.Parcelados.Where(x => x.Id == lancamento.ParceladoId).FirstOrDefaultAsync();
+                if (lancamento.DespesaReceita == true)
                 {
-                    if (lancamento.DespesaReceita == true)
+                    if (lancamento.ParceladoId != null)
+                    {
+                        var value = (-1) * lancamento.Valor * parcelado.Quantidade;
+                        conta.Saldo -= value;
+                    }
+                    else
                     {
                         var value = (-1) * lancamento.Valor;
                         conta.Saldo -= value;
+                    }
+
+                }
+                else
+                {
+                    if (lancamento.ParceladoId != null)
+                    {
+                        conta.Saldo += lancamento.Valor * parcelado.Quantidade;
                     }
                     else
                     {
                         conta.Saldo += lancamento.Valor;
                     }
                 }
+
 
                 await _context.SaveChangesAsync();
             }

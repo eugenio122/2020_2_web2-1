@@ -8,6 +8,7 @@ using FinanceManagement.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using FinanceManagement.Models.ViewModels;
+using System;
 
 namespace FinanceManagement.Controllers
 {
@@ -29,34 +30,34 @@ namespace FinanceManagement.Controllers
 
         // GET: api/Lancamentos
         [HttpGet]
-        public ActionResult<IEnumerable<LancamentoViewModel>> GetLancamentos()
+        public async Task<ActionResult<IEnumerable<LancamentoViewModel>>> GetLancamentos()
         {
             if (User.Identity.IsAuthenticated)
             {
                 var userId = this.GetUsuarioLogado();
 
                 List<LancamentoViewModel> lancamentoViewModel = new List<LancamentoViewModel>();
-                var lista = (from lanc in _context.Lancamentos
-                             join user in _context.Usuarios on lanc.Usuario.Id equals user.Id
-                             join catl in _context.CategoriaLancamentos on lanc.Id equals catl.LancamentoId
-                             join cate in _context.Categorias on catl.CategoriaId equals cate.Id
-                             join conl in _context.ContaLancamentos on lanc.Id equals conl.LancamentoId
-                             join cont in _context.Contas on conl.ContaId equals cont.Id
+                var lista = await (from lanc in _context.Lancamentos
+                                    join user in _context.Usuarios on lanc.Usuario.Id equals user.Id
+                                    join catl in _context.CategoriaLancamentos on lanc.Id equals catl.LancamentoId
+                                    join cate in _context.Categorias on catl.CategoriaId equals cate.Id
+                                    join conl in _context.ContaLancamentos on lanc.Id equals conl.LancamentoId
+                                    join cont in _context.Contas on conl.ContaId equals cont.Id
 
-                             where (user.Id == userId)
+                                    where (user.Id == userId)
 
-                             select new
-                             {
-                                 lanc.Id,
-                                 lanc.Descricao,
-                                 lanc.Valor,
-                                 lanc.Data,
-                                 lanc.DespesaReceita,
-                                 lanc.TipoLancamento,
-                                 cate.DescCategoria,
-                                 cont.DescConta
-                             }
-                            ).Distinct().OrderBy(x => x.Data).ToList();
+                                     select new
+                                     {
+                                         lanc.Id,
+                                         lanc.Descricao,
+                                         lanc.Valor,
+                                         lanc.Data,
+                                         lanc.DespesaReceita,
+                                         lanc.TipoLancamento,
+                                         cate.DescCategoria,
+                                         cont.DescConta
+                                     }
+                                    ).OrderBy(x => x.Data).ToListAsync();
 
                 foreach (var item in lista)
                 {
@@ -142,6 +143,55 @@ namespace FinanceManagement.Controllers
                 return NotFound();
             }
 
+            var userId = this.GetUsuarioLogado();
+
+            var listaConta = await _context.Contas.Where(x => x.Usuario.Id == userId).ToListAsync();
+            var listaContaLancamento = await _context.ContaLancamentos.Where(x => x.LancamentoId == lancamento.Id).ToListAsync();
+            foreach (var itemContaLancamento in listaContaLancamento)
+            {
+                foreach (var itemConta in listaConta)
+                {
+                    if (itemContaLancamento.ContaId == itemConta.Id && itemContaLancamento.LancamentoId == id)
+                    {
+                        var conta = await _context.Contas.FindAsync(itemConta.Id);
+                        var parcelado = await _context.Parcelados.Where(x => x.Id == lancamento.ParceladoId).FirstOrDefaultAsync();
+                        var fixo = await _context.Fixos.Where(x => x.Id == lancamento.FixoId).FirstOrDefaultAsync();
+                        if (lancamento.DespesaReceita)
+                        {
+                            if (lancamento.TipoLancamento.Equals("parcelados"))
+                            {
+                                double valor = lancamento.Valor * parcelado.Quantidade * -1;
+                                conta.Saldo += valor;
+                            }
+                            else if (lancamento.TipoLancamento.Equals("fixos"))
+                            {
+                                conta.Saldo += lancamento.Valor * -1;
+                            }
+                            else
+                            {
+                                conta.Saldo += lancamento.Valor * -1;
+                            }
+                        }
+                        else
+                        {
+                            if (lancamento.TipoLancamento.Equals("parcelados"))
+                            {
+                                conta.Saldo -= lancamento.Valor * parcelado.Quantidade;
+                            }
+                            else if (lancamento.TipoLancamento.Equals("fixos"))
+                            {
+                                conta.Saldo -= lancamento.Valor;
+                            }
+                            else
+                            {
+                                conta.Saldo -= lancamento.Valor;
+                            }
+                        }
+                    }
+                }
+            }
+            
+
             _context.Lancamentos.Remove(lancamento);
             await _context.SaveChangesAsync();
             
@@ -152,14 +202,19 @@ namespace FinanceManagement.Controllers
         {
             var userId = this.GetUsuarioLogado();
             var usuario = _context.Usuarios.Find(userId);
-
+            
             lancamento.Usuario = usuario;
             if (lancamento.DespesaReceita == true)
             {
                 lancamento.Valor = lancamento.Valor * -1;
             }
 
+            
             _context.Lancamentos.Add(lancamento);
+            CategoriaLancamento cl = new CategoriaLancamento() { LancamentoId = lancamento.Id, CategoriaId = 1 };
+            _context.CategoriaLancamentos.Add(cl);
+            ContaLancamento ctl = new ContaLancamento() { LancamentoId = lancamento.Id, ContaId = 1 };
+            _context.ContaLancamentos.Add(ctl);
             _context.SaveChanges();
         }
 
@@ -167,9 +222,9 @@ namespace FinanceManagement.Controllers
         private void deletar(int id)
         {
             var lancamento = _context.Lancamentos.Find(id);
-
+            
             _context.Lancamentos.Remove(lancamento);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
         private bool LancamentoExists(int id)
         {

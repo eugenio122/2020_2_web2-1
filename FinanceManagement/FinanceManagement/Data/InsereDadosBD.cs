@@ -74,7 +74,10 @@ namespace FinanceManagement.Data
             var banese = new Banco { Nome = "Banese" };
             var caixa = new Banco { Nome = "Caixa" };
             var santander = new Banco { Nome = "Santander" };
-            this.context.Bancos.AddRange(bradesco, itau, banese, caixa, santander);
+            var nubank = new Banco { Nome = "Nubank" };
+            var inter = new Banco { Nome = "Inter" };
+            var bb = new Banco { Nome = "Banco do Brasil" };
+            this.context.Bancos.AddRange(bradesco, itau, banese, caixa, santander, nubank, inter, bb);
         }
 
         private void AddTipoConta()

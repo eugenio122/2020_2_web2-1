@@ -64,9 +64,7 @@ export default function LancamentosList() {
                 return sumTotal + conta.saldo
             }, 0)
 
-            setValorTotal(totalValue.toFixed(2));
-
-            console.log(totalValue)
+            setValorTotal(totalValue);
         }
     }
 
@@ -104,6 +102,7 @@ export default function LancamentosList() {
         });
 
         getLancamentos()
+        getContas()
         setDetalheLancamento(null)
     }
 

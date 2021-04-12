@@ -27,5 +27,9 @@ namespace FinanceManagement.Models.ViewModels
         public string Parcelado { get; set; }
 
         public int Quantidade { get; set; }
+
+        public int FixoId { get; set; }
+
+        public int ParceladoId { get; set; }
     }
 }

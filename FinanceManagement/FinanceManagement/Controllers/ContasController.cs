@@ -56,11 +56,39 @@ namespace FinanceManagement.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutConta(int id, [FromBody] Conta conta)
         {
+            if (id != conta.Id)
+            {
+                return BadRequest();
+            }
 
-            this.deletar(id);
-            this.salvar(conta);
+            _context.Entry(conta).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ContaExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
+            /*this.deletar(id);
+
+            var userId = this.GetUsuarioLogado();
+            var listLancamento = await _context.Lancamentos.Where(x => x.Usuario.Id == userId).ToListAsync();
+
+
+            this.salvar(conta);
+
+            return NoContent();*/
         }
 
         // POST: api/Contas
