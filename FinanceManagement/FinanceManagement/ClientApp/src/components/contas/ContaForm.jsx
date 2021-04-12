@@ -128,12 +128,14 @@ export default function ContaForm(props) {
             usuarioId: props.user.sub
         }
 
-        if (props.contas.some(cont => cont.descConta.toLowerCase() === payload.descConta.toLowerCase())) {
-            return setErrors(['Essa conta ja existe'])
-        }
 
 
         if (props.contaEdit) {
+            if (props.contas.some(cont => cont.descConta.toLowerCase() === payload.descConta.toLowerCase()) && (props.contaEdit.descConta != 'Carteira Virtual')) {
+                return setErrors(['Essa conta ja existe'])
+            }
+
+
             const token = await authService.getAccessToken();
             const response = await fetch(`api/contas/${props.contaEdit.id}`, {
                 headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -147,6 +149,10 @@ export default function ContaForm(props) {
                 props.setShowFormConta(false)
             }
         } else {
+            if (props.contas.some(cont => cont.descConta.toLowerCase() === payload.descConta.toLowerCase())) {
+                return setErrors(['Essa conta ja existe'])
+            }
+
             const token = await authService.getAccessToken();
             const response = await fetch('api/contas', {
                 headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -173,6 +179,7 @@ export default function ContaForm(props) {
                             name="description"
                             id="form-description"
                             value={formData.descricao}
+                            disabled={formData.descricao === "Carteira Virtual"}
                             placeholder="Insira o nome"
                             onChange={(event) => {
                                 setFormData({ ...formData, descricao: event.target.value })
@@ -220,6 +227,7 @@ export default function ContaForm(props) {
         setBanco(null)
         props.setContaEdit(null)
         setFormData({ descricao: '', saldo: 'R$0,00' })
+        setErrors([])
     }
 
     return (

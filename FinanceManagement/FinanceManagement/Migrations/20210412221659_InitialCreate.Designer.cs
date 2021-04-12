@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210412203418_InitialCreate")]
+    [Migration("20210412221659_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
