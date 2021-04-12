@@ -116,9 +116,6 @@ export default function LancamentosList() {
             meses.push(getMonth(new Date(mes)))
         }
 
-        console.log(meses)
-        console.log(mesAtual)
-
         if (meses.findIndex(index => index === mesAtual) === -1) {
             return <span>Finalizado <Icon name='check' /></span>
         } else {
@@ -236,7 +233,7 @@ export default function LancamentosList() {
                         }
                         <hr />
                         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                            {/*<Button outline color='info' onClick={() => setLancamentoEdit(detalheLancamento)}><Icon name='edit' /> Editar</Button> {" "}*/}
+                            <Button outline color='info' onClick={() => setLancamentoEdit(detalheLancamento)}><Icon name='edit' /> Editar</Button> {" "}
                             <Button outline color='danger' onClick={() => deleteLancamento(detalheLancamento.id)}><Icon name='trash' /> Excluir</Button>
                         </div>
                     </div>

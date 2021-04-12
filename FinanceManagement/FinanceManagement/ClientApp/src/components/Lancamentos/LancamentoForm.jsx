@@ -124,6 +124,7 @@ export default function LancamentoForm(props) {
         const data = await response.json();
 
         const periodoOpts = data.map(periodo => ({ id: periodo.id, text: periodo.descPeriodo, value: periodo.id }))
+        setPeriodoParcelado({ qtd: '2', periodo: periodoOpts.find(pe => pe.text === 'Meses') ? periodoOpts.find(pe => pe.text === 'Meses').id : 2 })
         setPeriodosOptions(periodoOpts)
     }
 
@@ -136,6 +137,7 @@ export default function LancamentoForm(props) {
         const data = await response.json();
 
         const fixosOpts = data.map(fixo => ({ id: fixo.id, text: fixo.descFixo, value: fixo.id }))
+        setPeriodoFixo(fixosOpts.find(fix => fix.text === 'Mensal') ? fixosOpts.find(fix => fix.text === 'Mensal').id : 4)
         setFixosOptions(fixosOpts)
     }
 
