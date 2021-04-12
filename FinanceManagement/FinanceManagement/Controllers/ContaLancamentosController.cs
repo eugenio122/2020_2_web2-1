@@ -53,11 +53,7 @@ namespace FinanceManagement.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContaLancamento(int id, ContaLancamento contaLancamento)
         {
-            if (id != contaLancamento.Id)
-            {
-                return BadRequest();
-            }
-
+            contaLancamento.Id = id;
             _context.Entry(contaLancamento).State = EntityState.Modified;
 
             try

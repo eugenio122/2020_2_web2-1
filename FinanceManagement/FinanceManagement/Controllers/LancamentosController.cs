@@ -106,8 +106,24 @@ namespace FinanceManagement.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLancamento(int id, [FromBody] Lancamento lancamento)
         {
-            this.deletar(id);
-            this.salvar(lancamento);
+            lancamento.Id = id;
+            _context.Entry(lancamento).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LancamentoExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
@@ -158,14 +174,10 @@ namespace FinanceManagement.Controllers
                         var fixo = await _context.Fixos.Where(x => x.Id == lancamento.FixoId).FirstOrDefaultAsync();
                         if (lancamento.DespesaReceita)
                         {
-                            if (lancamento.TipoLancamento.Equals("parcelados"))
+                            if (lancamento.ParceladoId != null)
                             {
                                 double valor = lancamento.Valor * parcelado.Quantidade * -1;
                                 conta.Saldo += valor;
-                            }
-                            else if (lancamento.TipoLancamento.Equals("fixos"))
-                            {
-                                conta.Saldo += lancamento.Valor * -1;
                             }
                             else
                             {
@@ -174,13 +186,10 @@ namespace FinanceManagement.Controllers
                         }
                         else
                         {
-                            if (lancamento.TipoLancamento.Equals("parcelados"))
+                            if (lancamento.ParceladoId != null)
                             {
-                                conta.Saldo -= lancamento.Valor * parcelado.Quantidade;
-                            }
-                            else if (lancamento.TipoLancamento.Equals("fixos"))
-                            {
-                                conta.Saldo -= lancamento.Valor;
+                                double valor = lancamento.Valor * parcelado.Quantidade;
+                                conta.Saldo -= valor;
                             }
                             else
                             {
@@ -198,34 +207,6 @@ namespace FinanceManagement.Controllers
             return NoContent();
         }
 
-        private void salvar(Lancamento lancamento)
-        {
-            var userId = this.GetUsuarioLogado();
-            var usuario = _context.Usuarios.Find(userId);
-            
-            lancamento.Usuario = usuario;
-            if (lancamento.DespesaReceita == true)
-            {
-                lancamento.Valor = lancamento.Valor * -1;
-            }
-
-            
-            _context.Lancamentos.Add(lancamento);
-            CategoriaLancamento cl = new CategoriaLancamento() { LancamentoId = lancamento.Id, CategoriaId = 1 };
-            _context.CategoriaLancamentos.Add(cl);
-            ContaLancamento ctl = new ContaLancamento() { LancamentoId = lancamento.Id, ContaId = 1 };
-            _context.ContaLancamentos.Add(ctl);
-            _context.SaveChanges();
-        }
-
-
-        private void deletar(int id)
-        {
-            var lancamento = _context.Lancamentos.Find(id);
-            
-            _context.Lancamentos.Remove(lancamento);
-            _context.SaveChanges();
-        }
         private bool LancamentoExists(int id)
         {
             return _context.Lancamentos.Any(e => e.Id == id);

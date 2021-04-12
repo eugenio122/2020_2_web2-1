@@ -55,12 +55,8 @@ namespace FinanceManagement.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutConta(int id, [FromBody] Conta conta)
-        {
-            if (id != conta.Id)
-            {
-                return BadRequest();
-            }
-
+        { 
+            conta.Id = id;
             _context.Entry(conta).State = EntityState.Modified;
 
             try
@@ -80,15 +76,6 @@ namespace FinanceManagement.Controllers
             }
 
             return NoContent();
-            /*this.deletar(id);
-
-            var userId = this.GetUsuarioLogado();
-            var listLancamento = await _context.Lancamentos.Where(x => x.Usuario.Id == userId).ToListAsync();
-
-
-            this.salvar(conta);
-
-            return NoContent();*/
         }
 
         // POST: api/Contas
@@ -120,24 +107,6 @@ namespace FinanceManagement.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private void salvar(Conta conta)
-        {
-            var userId = this.GetUsuarioLogado();
-            var usuario =  _context.Usuarios.Find(userId);
-            conta.Usuario = usuario;
-
-            _context.Contas.Add(conta);
-            _context.SaveChanges();
-        }
-
-        private void deletar(int id)
-        {
-            Conta conta = _context.Contas.Find(id);
-
-            _context.Contas.Remove(conta);
-            _context.SaveChanges();
         }
 
         private bool ContaExists(int id)
