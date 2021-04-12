@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import authService from '../api-authorization/AuthorizeService';
-import { Modal, Form, ModalHeader, ModalBody, FormGroup, FormFeedback, Label, Input, Button } from 'reactstrap';
+import { Modal, Form, ModalHeader, ModalBody, FormGroup, FormFeedback, Label, Input, Button, Alert } from 'reactstrap';
 import { Icon } from 'semantic-ui-react'
 import { moneyInputFormat, moneyInputFormatToFloat } from '../../helpers/FnUtils'
 
@@ -16,6 +16,8 @@ export default function ContaForm(props) {
     const [banco, setBanco] = useState(null);
     const [formData, setFormData] = useState({ descricao: '', saldo: 'R$0,00' });
     const [errorsDataForm, setErrorsDataForm] = useState({ descricao: false, saldo: false });
+
+    const [errors, setErrors] = useState([])
 
     useEffect(() => {
         getTiposContas()
@@ -126,6 +128,10 @@ export default function ContaForm(props) {
             usuarioId: props.user.sub
         }
 
+        if (props.contas.some(cont => cont.descConta.toLowerCase() === payload.descConta.toLowerCase())) {
+            return setErrors(['Essa conta ja existe'])
+        }
+
 
         if (props.contaEdit) {
             const token = await authService.getAccessToken();
@@ -213,7 +219,7 @@ export default function ContaForm(props) {
         setTipoConta(null)
         setBanco(null)
         props.setContaEdit(null)
-        setFormData({ descricao: '', saldo: 'R$0,00'})
+        setFormData({ descricao: '', saldo: 'R$0,00' })
     }
 
     return (
@@ -227,6 +233,9 @@ export default function ContaForm(props) {
                     resetForm()
                 }}>{`${props.contaEdit ? 'Editar conta' : 'Nova conta'}`}</ModalHeader>
                 <ModalBody>
+                    {errors.length > 0 && <Alert color="danger">
+                        {errors.map(error => error)}
+                    </Alert>}
                     {type === 'tipoConta' && renderFormTipoConta()}
                     {type === 'banco' && renderFormBanco()}
                     {type === 'form' && renderForm()}

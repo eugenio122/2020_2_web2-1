@@ -78,6 +78,7 @@ export default function ContasList(props) {
 
             <ContaForm
                 user={user}
+                contas={contas}
                 contaEdit={contaEdit}
                 setContaEdit={setContaEdit}
                 showFormConta={showFormConta}
