@@ -25,12 +25,19 @@ Apesar de toda tecnologia existente hoje, uma das coisas que mais acontecem na s
 - Possuir, pelo menos um, relacionamento M:N (muito para muitos)
 - Fazer um programa, em C# com Entity Framework, para realizar carga inicial dos dados
 - Front-End: ReactJs
+- Possuir o NodeJs instalado
 
 ## Membros da equipe (Até 3 pessoas. Identificar o líder)
 
 - Eugenio Camilo: https://github.com/eugenio122 (líder)
 - Alan Felipe: https://github.com/alanflpns
 - Alef Nascimento: https://github.com/alefnascimentooliveira
+
+## Antes de executar o projeto pela primeira vez
+
+- Ir no terminal
+- Executar o comando dotnet build
+- Dá um cd na pasta ClienteApp e usar o comando npm install
 
 ## Dicas, repositórios e materiais úteis
 
